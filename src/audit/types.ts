@@ -54,10 +54,12 @@ export interface VulnerabilityCounts {
   high: number | null;
   critical: number | null;
   total: number | null;
+  filteredTotal: number | null;
 }
 
 export interface PackageAuditMetadata {
   vulnerabilities: VulnerabilityCounts;
+  thresholdSeverities: AuditThreshold[];
   dependencies: number | null;
   devDependencies: number | null;
   optionalDependencies: number | null;

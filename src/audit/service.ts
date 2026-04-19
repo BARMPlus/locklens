@@ -57,7 +57,7 @@ export async function runPackageAudit(
     },
     // metadata 的漏洞统计基于“完整去重后的 advisory 列表”重新计算，
     // 不再直接沿用底层工具返回的原始 advisory 条目计数。
-    metadata: normalizeMetadata(adapterResult.auditPayload, allAdvisories),
+    metadata: normalizeMetadata(adapterResult.auditPayload, allAdvisories, threshold),
     // advisories 则额外叠加 threshold 过滤，只保留当前阈值及更高等级的漏洞。
     advisories,
   };

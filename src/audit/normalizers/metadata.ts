@@ -1,6 +1,8 @@
 import type {
+  AuditThreshold,
   PackageAuditAdvisory,
   PackageAuditMetadata,
+  SupportedSeverity,
   VulnerabilityCounts,
 } from "../types.js";
 
@@ -53,18 +55,65 @@ function normalizeVulnerabilities(
     critical: counts.critical,
     // total 现在和去重后的 advisory 列表保持一致，不再使用底层原始条目总数。
     total: counts.total,
+    filteredTotal: null,
   };
+}
+
+function normalizeThresholdSeverities(
+  threshold: AuditThreshold
+): AuditThreshold[] {
+  const severityRank: Record<AuditThreshold, number> = {
+    low: 1,
+    moderate: 2,
+    high: 3,
+    critical: 4,
+  };
+
+  // 这个字段用于明确告诉前端：当前 threshold 会保留哪些级别。
+  // 例如 threshold = moderate 时，前端直接拿到 ["moderate", "high", "critical"]，
+  // 不需要再自己维护一套映射规则。
+  return (["low", "moderate", "high", "critical"] as AuditThreshold[]).filter(
+    (severity) => severityRank[severity] >= severityRank[threshold]
+  );
+}
+
+function countFilteredVulnerabilities(
+  advisories: PackageAuditAdvisory[],
+  threshold: AuditThreshold
+) {
+  const severityRank: Record<AuditThreshold | "info", number> = {
+    info: 0,
+    low: 1,
+    moderate: 2,
+    high: 3,
+    critical: 4,
+  };
+
+  return advisories.filter((advisory) => {
+    const severity = advisory.severity;
+
+    if (!severity) {
+      return false;
+    }
+
+    return severityRank[severity as SupportedSeverity] >= severityRank[threshold];
+  }).length;
 }
 
 export function normalizeMetadata(
   rawAudit: unknown,
-  advisories: PackageAuditAdvisory[]
+  advisories: PackageAuditAdvisory[],
+  threshold: AuditThreshold
 ): PackageAuditMetadata {
+  const vulnerabilities = normalizeVulnerabilities(advisories);
+  vulnerabilities.filteredTotal = countFilteredVulnerabilities(advisories, threshold);
+
   if (!isRecord(rawAudit)) {
     // yarn 通过库方式接入时，很多场景下没有完整 raw audit 对象。
     // 这时 metadata 只能明确表达“未知”，不能强行补默认统计值。
     return {
-      vulnerabilities: normalizeVulnerabilities(advisories),
+      vulnerabilities,
+      thresholdSeverities: normalizeThresholdSeverities(threshold),
       dependencies: null,
       devDependencies: null,
       optionalDependencies: null,
@@ -84,7 +133,8 @@ export function normalizeMetadata(
   const totalDependencies = metadata ? readNumber(metadata, "totalDependencies") : null;
 
   return {
-    vulnerabilities: normalizeVulnerabilities(advisories),
+    vulnerabilities,
+    thresholdSeverities: normalizeThresholdSeverities(threshold),
     // 不同包管理器在 metadata 里的依赖统计结构不完全一致：
     // 有的直接平铺在 metadata 下，有的会嵌套在 dependencies 对象里。
     dependencies:
