@@ -46,6 +46,23 @@ function getAuditor(packageManager: PackageManager) {
   }
 }
 
+async function runAuditSilently<T>(task: () => Promise<T>) {
+  const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+  const originalStderrWrite = process.stderr.write.bind(process.stderr);
+
+  // audit-ci 的库模式即使提供了 reporter，仍可能把原始 JSON 直接打印到终端。
+  // 这里在 adapter 层暂时静默标准输出，只把最终整理后的结果交给上层测试入口展示。
+  process.stdout.write = (() => true) as typeof process.stdout.write;
+  process.stderr.write = (() => true) as typeof process.stderr.write;
+
+  try {
+    return await task();
+  } finally {
+    process.stdout.write = originalStdoutWrite;
+    process.stderr.write = originalStderrWrite;
+  }
+}
+
 export async function runLibraryAuditAdapter(
   input: AuditCiAdapterInput
 ): Promise<AuditCiAdapterResult> {
@@ -85,7 +102,7 @@ export async function runLibraryAuditAdapter(
 
   try {
     // 统一通过 reporter 截获 audit-ci 底层返回，后续再交给归一化层处理。
-    const summary = await auditor(config, reporter);
+    const summary = await runAuditSilently(() => auditor(config, reporter));
 
     return {
       auditSummary: summary,

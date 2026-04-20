@@ -10,6 +10,7 @@ import type {
 export type LockfileName = (typeof LOCKFILE_PRIORITY)[number];
 export type PackageManager = "npm" | "yarn" | "pnpm";
 export type AuditThreshold = "low" | "moderate" | "high" | "critical";
+export type AuditSourceKind = "local" | "remote";
 export type AuditReportType = typeof DEFAULT_REPORT_TYPE;
 export type AuditOutputFormat = typeof DEFAULT_OUTPUT_FORMAT;
 export type SupportedSeverity =
@@ -28,7 +29,7 @@ export interface LockfileDetectionResult {
 }
 
 export interface PackageAuditOptions {
-  directory?: string;
+  source?: string;
   threshold?: AuditThreshold;
   allowlist?: AllowlistRecord[];
   skipDev?: boolean;
@@ -39,6 +40,10 @@ export interface PackageAuditOptions {
 }
 
 export interface PackageAuditRuntime {
+  source: string;
+  sourceType: AuditSourceKind;
+  repositoryUrl: string | null;
+  resolvedRef: string | null;
   directory: string;
   packageManager: PackageManager;
   lockfileName: LockfileName;
@@ -96,6 +101,31 @@ export interface AuditCiAdapterInput {
 export interface AuditCiAdapterResult {
   auditSummary: AuditCiSummary;
   auditPayload: unknown | null;
+}
+
+export interface ResolvedLocalAuditSource {
+  kind: "local";
+  inputSource: string;
+  localDirectory: string;
+}
+
+export interface ResolvedRemoteAuditSource {
+  kind: "remote";
+  inputSource: string;
+  repositoryUrl: string;
+}
+
+export type ResolvedAuditSource =
+  | ResolvedLocalAuditSource
+  | ResolvedRemoteAuditSource;
+
+export interface PreparedAuditWorkspace {
+  source: string;
+  sourceType: AuditSourceKind;
+  directory: string;
+  repositoryUrl: string | null;
+  resolvedRef: string | null;
+  cleanup: () => Promise<void>;
 }
 
 export interface NormalizerContext {

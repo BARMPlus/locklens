@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node build/client.js",
     "test:audit": "npx tsx src/tests/audit-manual-test.ts",
+    "test:audit:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
     "prepare": "husky"
