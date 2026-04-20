@@ -9,7 +9,15 @@ export async function runCliAudit(options: CliRunOptions) {
     registry: options.registry,
     skipDev: options.skipDev,
     retryCount: options.retryCount,
+    outputFormat: options.outputFormat,
+    outputFormatLanguage: options.outputFormatLanguage,
   })
+
+  // 默认输出已经切到 text，这里保留字符串/JSON 双分支以兼容显式 json 调用。
+  if (typeof result === 'string') {
+    process.stdout.write(`${result}\n`)
+    return
+  }
 
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`)
 }

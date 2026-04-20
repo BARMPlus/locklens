@@ -1,6 +1,10 @@
 import type { AllowlistRecord } from "audit-ci";
 
-import { DEFAULT_AUDIT_THRESHOLD } from "./constants";
+import {
+  DEFAULT_AUDIT_THRESHOLD,
+  DEFAULT_OUTPUT_FORMAT,
+  DEFAULT_OUTPUT_FORMAT_LANGUAGE,
+} from "./constants";
 import { resolveAuditSource } from "./git-source/source-resolver";
 import { prepareAuditWorkspace } from "./git-workspace/remote-workspace";
 import { runAuditCiAdapter } from "./audit-ci-adapter";
@@ -10,11 +14,24 @@ import {
   normalizeAdvisories,
 } from "./normalizers/advisories";
 import { normalizeMetadata } from "./normalizers/metadata";
+import { renderTextReport } from "./report/text-report";
 import type { PackageAuditOptions, PackageAuditResult } from "./types";
 
 export async function runPackageAudit(
+  options?: undefined
+): Promise<string>;
+export async function runPackageAudit(
+  options?: PackageAuditOptions & { outputFormat?: "text" }
+): Promise<string>;
+export async function runPackageAudit(
+  options: PackageAuditOptions & { outputFormat: "json" }
+): Promise<PackageAuditResult>;
+export async function runPackageAudit(
+  options?: PackageAuditOptions
+): Promise<PackageAuditResult | string>;
+export async function runPackageAudit(
   options: PackageAuditOptions = {}
-): Promise<PackageAuditResult> {
+): Promise<PackageAuditResult | string> {
   const source = options.source ?? process.cwd();
   const resolvedSource = await resolveAuditSource(source);
   const workspace = await prepareAuditWorkspace(resolvedSource);
@@ -79,5 +96,17 @@ export async function runPackageAudit(
     throw executionError;
   }
 
-  return result as PackageAuditResult;
+  const normalizedResult = result as PackageAuditResult;
+
+  const outputFormat = options.outputFormat ?? DEFAULT_OUTPUT_FORMAT;
+
+  if (outputFormat === "text") {
+    // 文本输出时再根据语言参数选择中英文模板；json 输出分支会直接返回结构化结果。
+    return renderTextReport(
+      normalizedResult,
+      options.outputFormatLanguage ?? DEFAULT_OUTPUT_FORMAT_LANGUAGE
+    );
+  }
+
+  return normalizedResult;
 }

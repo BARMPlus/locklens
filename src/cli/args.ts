@@ -1,4 +1,6 @@
 export type CliThreshold = 'low' | 'moderate' | 'high' | 'critical'
+export type CliOutputFormat = 'json' | 'text'
+export type CliOutputFormatLanguage = 'zh' | 'en'
 
 export interface CliRunOptions {
   source?: string
@@ -6,6 +8,8 @@ export interface CliRunOptions {
   registry?: string
   skipDev?: boolean
   retryCount?: number
+  outputFormat?: CliOutputFormat
+  outputFormatLanguage?: CliOutputFormatLanguage
 }
 
 export type ParsedCliArgs =
@@ -15,6 +19,8 @@ export type ParsedCliArgs =
   | { mode: 'run'; options: CliRunOptions }
 
 const VALID_THRESHOLDS: CliThreshold[] = ['low', 'moderate', 'high', 'critical']
+const VALID_OUTPUT_FORMATS: CliOutputFormat[] = ['json', 'text']
+const VALID_OUTPUT_FORMAT_LANGUAGES: CliOutputFormatLanguage[] = ['zh', 'en']
 
 export class CliArgumentError extends Error {
   readonly exitCode = 2
@@ -94,6 +100,32 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
         index += 1
         break
       }
+      case '--output-format': {
+        const outputFormat = readFlagValue(args, index, '--output-format')
+
+        if (!VALID_OUTPUT_FORMATS.includes(outputFormat as CliOutputFormat)) {
+          throw new CliArgumentError(
+            `Invalid value for --output-format: ${outputFormat}. Expected one of ${VALID_OUTPUT_FORMATS.join(', ')}.`
+          )
+        }
+
+        options.outputFormat = outputFormat as CliOutputFormat
+        index += 1
+        break
+      }
+      case '--output-format-language': {
+        const outputFormatLanguage = readFlagValue(args, index, '--output-format-language')
+
+        if (!VALID_OUTPUT_FORMAT_LANGUAGES.includes(outputFormatLanguage as CliOutputFormatLanguage)) {
+          throw new CliArgumentError(
+            `Invalid value for --output-format-language: ${outputFormatLanguage}. Expected one of ${VALID_OUTPUT_FORMAT_LANGUAGES.join(', ')}.`
+          )
+        }
+
+        options.outputFormatLanguage = outputFormatLanguage as CliOutputFormatLanguage
+        index += 1
+        break
+      }
       default:
         throw new CliArgumentError(`Unknown argument: ${argument}. Use --help to view supported flags.`)
     }
@@ -118,6 +150,8 @@ export function buildCliHelpText(packageName: string) {
     '  --registry <url>         Custom registry URL passed to audit execution',
     '  --skip-dev               Skip dev dependencies during audit',
     '  --retry-count <number>   Retry count for audit execution',
+    '  --output-format <value>  json | text (default: text)',
+    '  --output-format-language <value>  zh | en (default: zh for text output)',
     '  --help, -h               Show this help text',
     '  --version, -v            Show package version',
   ].join('\n')

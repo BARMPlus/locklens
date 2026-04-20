@@ -24,6 +24,10 @@ function parseCliJsonResult(result) {
   return JSON.parse(result.stdout)
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 async function runRemoteCliWithRetry(source, threshold = 'moderate') {
   let lastResult = null
 
@@ -34,7 +38,7 @@ async function runRemoteCliWithRetry(source, threshold = 'moderate') {
 
     const result = await runBuiltCli(
       buildClientPath,
-      ['--source', source, '--threshold', threshold],
+      ['--source', source, '--threshold', threshold, '--output-format', 'json'],
       {
         cwd: projectRoot,
         timeout: 120_000,
@@ -84,6 +88,127 @@ function assertNormalizedAuditMetrics(payload) {
   )
 }
 
+function buildDisplayedSeverityLabels(payload) {
+  const severityLabels = {
+    low: '低危',
+    moderate: '中危',
+    high: '高危',
+    critical: '严重',
+  }
+
+  return payload.metadata.thresholdSeverities.map((severity) => severityLabels[severity]).join('、')
+}
+
+function buildDisplayedSeverityLabelsEn(payload) {
+  const severityLabels = {
+    low: 'Low',
+    moderate: 'Moderate',
+    high: 'High',
+    critical: 'Critical',
+  }
+
+  return payload.metadata.thresholdSeverities.map((severity) => severityLabels[severity]).join(', ')
+}
+
+function buildMinimumDisplayedSeverityLabel(payload) {
+  const severityLabels = {
+    low: '低危',
+    moderate: '中危',
+    high: '高危',
+    critical: '严重',
+  }
+
+  const minimumSeverity = payload.metadata.thresholdSeverities[0]
+  return minimumSeverity ? severityLabels[minimumSeverity] : '无'
+}
+
+function buildMinimumDisplayedSeverityLabelEn(payload) {
+  const severityLabels = {
+    low: 'Low',
+    moderate: 'Moderate',
+    high: 'High',
+    critical: 'Critical',
+  }
+
+  const minimumSeverity = payload.metadata.thresholdSeverities[0]
+  return minimumSeverity ? severityLabels[minimumSeverity] : 'None'
+}
+
+function assertTextReportMatchesPayload(reportText, payload) {
+  const { vulnerabilities } = payload.metadata
+
+  assert.match(reportText, new RegExp(`审计来源：${escapeRegExp(payload.runtime.source)}`))
+  assert.match(
+    reportText,
+    new RegExp(`- lockFile：${escapeRegExp(payload.runtime.lockfileName)}`)
+  )
+  assert.match(
+    reportText,
+    new RegExp(`- \\*\\*风险漏洞总数\\*\\*：\\*\\*${vulnerabilities.total ?? 0}\\*\\*`)
+  )
+
+  const severityAssertions = [
+    ['严重', vulnerabilities.critical ?? 0],
+    ['高危', vulnerabilities.high ?? 0],
+    ['中危', vulnerabilities.moderate ?? 0],
+    ['低危', vulnerabilities.low ?? 0],
+  ]
+
+  for (const [label, count] of severityAssertions) {
+    assert.match(
+      reportText,
+      new RegExp(`- \\*\\*${label}漏洞\\*\\*：共计 \\*\\*${count}\\*\\* 个`)
+    )
+  }
+
+  assert.doesNotMatch(reportText, /提示漏洞/)
+
+  assert.match(
+    reportText,
+    new RegExp(
+      `当前展示的漏洞最低级别为${escapeRegExp(buildMinimumDisplayedSeverityLabel(payload))}，下面将展示${escapeRegExp(buildDisplayedSeverityLabels(payload))}的错误信息，这些错误总数一共为${payload.metadata.vulnerabilities.filteredTotal ?? 0}个`
+    )
+  )
+
+  assert.doesNotMatch(reportText, /\*\*依赖关系\*\*：\n\s*\n/)
+}
+
+function assertEnglishTextReportMatchesPayload(reportText, payload) {
+  const { vulnerabilities } = payload.metadata
+
+  assert.match(reportText, /## Audit Overview/)
+  assert.match(reportText, new RegExp(`- Audit Source: ${escapeRegExp(payload.runtime.source)}`))
+  assert.match(
+    reportText,
+    new RegExp(`- lockFile: ${escapeRegExp(payload.runtime.lockfileName)}`)
+  )
+  assert.match(
+    reportText,
+    new RegExp(`- \\*\\*Total Vulnerabilities\\*\\*: \\*\\*${vulnerabilities.total ?? 0}\\*\\*`)
+  )
+
+  const severityAssertions = [
+    ['Critical', vulnerabilities.critical ?? 0],
+    ['High', vulnerabilities.high ?? 0],
+    ['Moderate', vulnerabilities.moderate ?? 0],
+    ['Low', vulnerabilities.low ?? 0],
+  ]
+
+  for (const [label, count] of severityAssertions) {
+    assert.match(
+      reportText,
+      new RegExp(`- \\*\\*${label}\\*\\*: \\*\\*${count}\\*\\*`)
+    )
+  }
+
+  assert.match(
+    reportText,
+    new RegExp(
+      `The minimum displayed vulnerability level is ${escapeRegExp(buildMinimumDisplayedSeverityLabelEn(payload))}\\. The following report shows ${escapeRegExp(buildDisplayedSeverityLabelsEn(payload))} issues, with \\*\\*${payload.metadata.vulnerabilities.filteredTotal ?? 0}\\*\\* issues in total\\.`
+    )
+  )
+}
+
 /**
  * 这一组测试只覆盖正式构建产物的命令行行为。
  * 手动联调用例仍然放在 src/tests 下，两者职责分开，后续维护会更直观。
@@ -118,6 +243,24 @@ test('CLI: 非法 threshold 应返回参数错误退出码', async () => {
   assert.match(result.stderr, /Invalid value for --threshold/)
 })
 
+test('CLI: 非法 output format 应返回参数错误退出码', async () => {
+  const result = await runBuiltCli(buildClientPath, ['--output-format', 'markdown'], {
+    cwd: projectRoot,
+  })
+
+  assert.equal(result.exitCode, 2)
+  assert.match(result.stderr, /Invalid value for --output-format/)
+})
+
+test('CLI: 非法 output format language 应返回参数错误退出码', async () => {
+  const result = await runBuiltCli(buildClientPath, ['--output-format-language', 'jp'], {
+    cwd: projectRoot,
+  })
+
+  assert.equal(result.exitCode, 2)
+  assert.match(result.stderr, /Invalid value for --output-format-language/)
+})
+
 test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
   const result = await runBuiltCli(
     buildClientPath,
@@ -129,6 +272,56 @@ test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
 
   assert.equal(result.exitCode, 1)
   assert.match(result.stderr, /not a valid local directory or supported Git repository address/i)
+})
+
+test('CLI: 默认 output format 应返回中文文本报告', { timeout: 120_000 }, async () => {
+  const jsonResult = await runBuiltCli(
+    buildClientPath,
+    ['--source', projectRoot, '--threshold', 'moderate', '--output-format', 'json'],
+    {
+      cwd: projectRoot,
+      timeout: 120_000,
+    }
+  )
+  const textResult = await runBuiltCli(
+    buildClientPath,
+    ['--source', projectRoot, '--threshold', 'moderate'],
+    {
+      cwd: projectRoot,
+      timeout: 120_000,
+    }
+  )
+
+  const payload = parseCliJsonResult(jsonResult)
+
+  assert.equal(textResult.exitCode, 0, `CLI should succeed, but stderr is: ${textResult.stderr}`)
+  assert.doesNotMatch(textResult.stdout, /^\s*\{/)
+  assertTextReportMatchesPayload(textResult.stdout, payload)
+})
+
+test('CLI: 英文文本模板应返回英文报告', { timeout: 120_000 }, async () => {
+  const jsonResult = await runBuiltCli(
+    buildClientPath,
+    ['--source', projectRoot, '--threshold', 'moderate', '--output-format', 'json'],
+    {
+      cwd: projectRoot,
+      timeout: 120_000,
+    }
+  )
+  const textResult = await runBuiltCli(
+    buildClientPath,
+    ['--source', projectRoot, '--threshold', 'moderate', '--output-format-language', 'en'],
+    {
+      cwd: projectRoot,
+      timeout: 120_000,
+    }
+  )
+
+  const payload = parseCliJsonResult(jsonResult)
+
+  assert.equal(textResult.exitCode, 0, `CLI should succeed, but stderr is: ${textResult.stderr}`)
+  assert.doesNotMatch(textResult.stdout, /^\s*\{/)
+  assertEnglishTextReportMatchesPayload(textResult.stdout, payload)
 })
 
 test('CLI: GitHub 公开仓库应返回有效审计结果', { timeout: 120_000 }, async () => {

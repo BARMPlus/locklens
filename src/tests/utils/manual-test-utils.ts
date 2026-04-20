@@ -27,18 +27,22 @@ export function createTimestamp() {
 }
 
 export async function writeManualAuditResult(
-  result: PackageAuditResult,
-  filePrefix: string
+  result: PackageAuditResult | string,
+  filePrefix: string,
+  options: {
+    outputDirectory: string
+    extension?: 'json' | 'md'
+  }
 ) {
-  // 远程审计使用的是临时工作区，结束后会被清理，所以结果文件要写到当前工具仓库根目录。
-  // 本地审计则继续写到被审计项目目录，便于和 audit-ci 原生命令的输出做对比。
-  const outputDirectory =
-    result.runtime.sourceType === 'remote' ? process.cwd() : result.runtime.directory
-  const outputFileName = `${filePrefix}-${createTimestamp()}.json`
+  const { outputDirectory } = options
+  const extension = options.extension ?? (typeof result === 'string' ? 'md' : 'json')
+  const outputFileName = `${filePrefix}-${createTimestamp()}.${extension}`
   const outputFilePath = path.join(outputDirectory, outputFileName)
+  const outputContent =
+    typeof result === 'string' ? `${result}\n` : `${JSON.stringify(result, null, 2)}\n`
 
   await mkdir(outputDirectory, { recursive: true })
-  await writeFile(outputFilePath, `${JSON.stringify(result, null, 2)}\n`, 'utf8')
+  await writeFile(outputFilePath, outputContent, 'utf8')
 
   return outputFilePath
 }

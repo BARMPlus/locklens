@@ -1,8 +1,10 @@
 import type { AllowlistRecord, Summary as AuditCiSummary } from "audit-ci";
 
-import type {
+import {
+  AUDIT_OUTPUT_FORMATS,
+  AUDIT_OUTPUT_FORMAT_LANGUAGES,
   DEFAULT_AUDIT_THRESHOLD,
-  DEFAULT_OUTPUT_FORMAT,
+  DEFAULT_OUTPUT_FORMAT_LANGUAGE,
   DEFAULT_REPORT_TYPE,
   LOCKFILE_PRIORITY,
 } from "./constants";
@@ -12,7 +14,11 @@ export type PackageManager = "npm" | "yarn" | "pnpm";
 export type AuditThreshold = "low" | "moderate" | "high" | "critical";
 export type AuditSourceKind = "local" | "remote";
 export type AuditReportType = typeof DEFAULT_REPORT_TYPE;
-export type AuditOutputFormat = typeof DEFAULT_OUTPUT_FORMAT;
+export type AuditOutputFormat =
+  | (typeof AUDIT_OUTPUT_FORMATS)[number];
+export type AuditOutputFormatLanguage =
+  | typeof DEFAULT_OUTPUT_FORMAT_LANGUAGE
+  | (typeof AUDIT_OUTPUT_FORMAT_LANGUAGES)[number];
 export type SupportedSeverity =
   | "info"
   | "low"
@@ -37,6 +43,8 @@ export interface PackageAuditOptions {
   retryCount?: number;
   passEnoAudit?: boolean;
   extraArgs?: string[];
+  outputFormat?: AuditOutputFormat;
+  outputFormatLanguage?: AuditOutputFormatLanguage;
 }
 
 export interface PackageAuditRuntime {

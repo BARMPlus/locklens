@@ -37,9 +37,12 @@ function createAuditServer() {
         registry: z.string().optional().describe('Custom registry URL used during audit execution'),
         skipDev: z.boolean().optional().describe('Whether to skip dev dependencies during audit'),
         retryCount: z.number().int().min(0).optional().describe('Retry count passed to the audit executor'),
+        outputFormat: z.enum(['json', 'text']).optional().describe('Response format. Defaults to text.'),
+        // 语言参数和输出格式拆开定义，避免把“格式”和“语言”混进一个字段里。
+        outputFormatLanguage: z.enum(['zh', 'en']).optional().describe('Text report language. Defaults to zh.'),
       },
     },
-    async ({ source, threshold, registry, skipDev, retryCount }) => {
+    async ({ source, threshold, registry, skipDev, retryCount, outputFormat, outputFormatLanguage }) => {
       try {
         const result = await runPackageAudit({
           source,
@@ -47,7 +50,20 @@ function createAuditServer() {
           registry,
           skipDev,
           retryCount,
+          outputFormat,
+          outputFormatLanguage,
         })
+
+        if (typeof result === 'string') {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: result,
+              },
+            ],
+          }
+        }
 
         return {
           content: [

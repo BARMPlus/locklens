@@ -17,15 +17,18 @@ async function main() {
   const result = await runPackageAudit({
     source,
     threshold: 'moderate',
+    outputFormat: 'json',
+    outputFormatLanguage: 'en',
   })
   const outputFilePath = await writeManualAuditResult(
     result,
-    'audit-remote-manual-result'
+    'audit-remote-manual-result',
+    {
+      outputDirectory: process.cwd(),
+    }
   )
 
   console.log('[audit-remote-manual-test] 结果写入成功')
-  console.log(`[audit-remote-manual-test] 审计来源: ${result.runtime.source}`)
-  console.log(`[audit-remote-manual-test] 临时目录: ${result.runtime.directory}`)
   console.log(`[audit-remote-manual-test] 输出文件: ${outputFilePath}`)
 }
 
