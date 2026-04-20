@@ -5,13 +5,13 @@ import path from "node:path";
 import {
   PackageManifestNotFoundError,
   RemoteWorkspaceCleanupError,
-} from "../errors.js";
+} from "../errors";
 import type {
   PreparedAuditWorkspace,
   ResolvedAuditSource,
   ResolvedRemoteAuditSource,
-} from "../types.js";
-import { runGitCommand } from "./git-command.js";
+} from "../types";
+import { runGitCommand } from "./git-command";
 
 const ROOT_AUDIT_FILES = [
   "package.json",

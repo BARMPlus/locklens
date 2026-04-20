@@ -1,6 +1,6 @@
-import { runLibraryAuditAdapter } from "./adapters/library-audit-adapter.js";
-import { runYarnCliAuditAdapter } from "./adapters/yarn-cli-audit-adapter.js";
-import type { AuditCiAdapterInput, AuditCiAdapterResult } from "./types.js";
+import { runLibraryAuditAdapter } from "./adapters/library-audit-adapter";
+import { runYarnCliAuditAdapter } from "./adapters/yarn-cli-audit-adapter";
+import type { AuditCiAdapterInput, AuditCiAdapterResult } from "./types";
 
 export async function runAuditCiAdapter(
   input: AuditCiAdapterInput

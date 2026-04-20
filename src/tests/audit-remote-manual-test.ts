@@ -1,7 +1,7 @@
-import { runPackageAudit } from '../audit/service.js'
+import { runPackageAudit } from '../audit'
 import {
   writeManualAuditResult,
-} from './utils/manual-test-utils.js'
+} from './utils/manual-test-utils'
 
 async function main() {
   // 这个文件是“远程仓库手动联调入口”，不是自动化单测。

@@ -2,15 +2,21 @@
   "name": "frontend-audit-mcp",
   "version": "1.0.0",
   "main": "index.js",
+  "bin": {
+    "frontend-audit-mcp": "build/client.js"
+  },
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "start": "node build/client.js",
-    "test:audit": "npx tsx src/tests/audit-manual-test.ts",
-    "test:audit:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
+    "test:cli": "yarn build && node --test tests/cli",
+    "test:manual:local": "npx tsx src/tests/audit-manual-test.ts",
+    "test:manual:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "yarn test:cli"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +26,8 @@
     "@anthropic-ai/sdk": "^0.90.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "audit-ci": "^7.1.0",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -29,6 +36,7 @@
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.58.2"

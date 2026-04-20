@@ -8,13 +8,13 @@ import { finished } from "node:stream/promises";
 
 import { gitHubAdvisoryUrlToAdvisoryId, type Summary as AuditCiSummary } from "audit-ci";
 
-import { AuditExecutionError } from "../errors.js";
+import { AuditExecutionError } from "../errors";
 import type {
   AuditCiAdapterInput,
   AuditCiAdapterResult,
   AuditThreshold,
   SupportedSeverity,
-} from "../types.js";
+} from "../types";
 
 interface YarnAuditPayload {
   advisories: Record<string, unknown>;
@@ -392,7 +392,7 @@ function buildAuditCiArgs(input: AuditCiAdapterInput) {
 function getAuditCiBinPath() {
   const require = createRequire(import.meta.url);
   const packageJsonPath = require.resolve("audit-ci/package.json");
-  return path.join(path.dirname(packageJsonPath), "dist", "bin.js");
+  return path.join(path.dirname(packageJsonPath), "dist", "bin");
 }
 
 function createCleanAuditEnv() {

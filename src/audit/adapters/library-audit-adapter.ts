@@ -9,14 +9,14 @@ import {
 import {
   DEFAULT_OUTPUT_FORMAT,
   DEFAULT_REPORT_TYPE,
-} from "../constants.js";
-import { AuditExecutionError } from "../errors.js";
+} from "../constants";
+import { AuditExecutionError } from "../errors";
 import type {
   AuditCiAdapterInput,
   AuditCiAdapterResult,
   AuditThreshold,
   PackageManager,
-} from "../types.js";
+} from "../types";
 
 function mapThresholdToConfig(threshold: AuditThreshold) {
   // audit-ci 的阈值配置是多个布尔字段，而不是单个 severity 字段。

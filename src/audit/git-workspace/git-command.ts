@@ -7,7 +7,7 @@ import {
   GitCommandError,
   GitSparseCheckoutError,
   GitTimeoutError,
-} from "../errors.js";
+} from "../errors";
 
 const execFileAsync = promisify(execFile);
 const DEFAULT_GIT_TIMEOUT_MS = 60_000;

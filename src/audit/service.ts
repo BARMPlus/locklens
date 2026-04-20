@@ -1,16 +1,16 @@
 import type { AllowlistRecord } from "audit-ci";
 
-import { DEFAULT_AUDIT_THRESHOLD } from "./constants.js";
-import { resolveAuditSource } from "./git-source/source-resolver.js";
-import { prepareAuditWorkspace } from "./git-workspace/remote-workspace.js";
-import { runAuditCiAdapter } from "./audit-ci-adapter.js";
-import { detectLockfile } from "./lockfile.js";
+import { DEFAULT_AUDIT_THRESHOLD } from "./constants";
+import { resolveAuditSource } from "./git-source/source-resolver";
+import { prepareAuditWorkspace } from "./git-workspace/remote-workspace";
+import { runAuditCiAdapter } from "./audit-ci-adapter";
+import { detectLockfile } from "./lockfile";
 import {
   filterAdvisoriesByThreshold,
   normalizeAdvisories,
-} from "./normalizers/advisories.js";
-import { normalizeMetadata } from "./normalizers/metadata.js";
-import type { PackageAuditOptions, PackageAuditResult } from "./types.js";
+} from "./normalizers/advisories";
+import { normalizeMetadata } from "./normalizers/metadata";
+import type { PackageAuditOptions, PackageAuditResult } from "./types";
 
 export async function runPackageAudit(
   options: PackageAuditOptions = {}

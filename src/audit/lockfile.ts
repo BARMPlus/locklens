@@ -1,13 +1,13 @@
 import { access } from "node:fs/promises";
 import path from "node:path";
 
-import { LOCKFILE_PRIORITY } from "./constants.js";
-import { LockfileNotFoundError } from "./errors.js";
+import { LOCKFILE_PRIORITY } from "./constants";
+import { LockfileNotFoundError } from "./errors";
 import type {
   LockfileDetectionResult,
   LockfileName,
   PackageManager,
-} from "./types.js";
+} from "./types";
 
 const PACKAGE_MANAGER_BY_LOCKFILE: Record<LockfileName, PackageManager> = {
   "package-lock.json": "npm",

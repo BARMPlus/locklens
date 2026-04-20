@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
-import type { PackageAuditResult } from '../../audit/types.js'
+import type { PackageAuditResult } from '../../audit/types'
 
 export function createTimestamp() {
   // 所有手动联调输出统一按中国大陆时间命名，避免文件名时间和本地理解不一致。

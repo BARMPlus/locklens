@@ -5,7 +5,7 @@ import type {
   DEFAULT_OUTPUT_FORMAT,
   DEFAULT_REPORT_TYPE,
   LOCKFILE_PRIORITY,
-} from "./constants.js";
+} from "./constants";
 
 export type LockfileName = (typeof LOCKFILE_PRIORITY)[number];
 export type PackageManager = "npm" | "yarn" | "pnpm";
