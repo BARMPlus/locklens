@@ -1,8 +1,8 @@
-import { AuditError } from '../audit/errors'
-import { runPackageAudit } from '../audit/service'
-import type { CliRunOptions } from './args'
+import { AuditError } from '../audit'
+import { runPackageAudit } from '../audit'
+import type { ValidatedCliRunOptions } from './args'
 
-export async function runCliAudit(options: CliRunOptions) {
+export async function runCliAudit(options: ValidatedCliRunOptions) {
   const result = await runPackageAudit({
     source: options.source,
     threshold: options.threshold,

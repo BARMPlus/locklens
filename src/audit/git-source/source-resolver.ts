@@ -17,12 +17,16 @@ function ensureGitSuffix(repositoryPath: string) {
 }
 
 function isPublicGitHost(hostname: string) {
-  return hostname === "github.com" || hostname === "gitlab.com";
+  return (
+    hostname === "github.com" ||
+    hostname === "gitlab.com" ||
+    hostname === "gitee.com"
+  );
 }
 
 function normalizeRemoteRepositoryUrl(source: string) {
   // 远程来源解析层的协议策略统一收口在这里：
-  // 1. GitHub / GitLab 公网地址：
+  // 1. GitHub / GitLab / Gitee 公网地址：
   //    - 用户传 HTTPS，就按 HTTPS 执行
   //    - 用户传 SSH，就按 SSH 执行
   // 2. 其他域名：

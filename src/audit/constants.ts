@@ -16,6 +16,8 @@ export const AUDIT_OUTPUT_FORMAT_LANGUAGES = ["zh", "en"] as const;
 
 // 默认 npm 源
 export const DEFAULT_AUDIT_REGISTRY =  "https://registry.npmjs.org/" as const;
+// 远程仓库 TCP 连通性预检查默认超时时间。
+export const DEFAULT_REMOTE_CONNECTIVITY_TIMEOUT_MS = 5_000 as const;
 
 export const EMPTY_VULNERABILITIES = {
   info: null,

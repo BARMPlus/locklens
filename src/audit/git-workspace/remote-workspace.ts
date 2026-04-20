@@ -11,6 +11,7 @@ import type {
   ResolvedAuditSource,
   ResolvedRemoteAuditSource,
 } from "../types";
+import { assertRemoteRepositoryConnectivity } from "../remote-connectivity";
 import { runGitCommand } from "./git-command";
 
 const ROOT_AUDIT_FILES = [
@@ -72,13 +73,22 @@ export async function prepareAuditWorkspace(
     };
   }
 
+  // 这里先做一次轻量 TCP 预检查。
+  // 这样在“没连内网 / 端口被拦截 / DNS 不通”这些场景里可以更快失败，
+  // 不必先等 Git clone 的 60s 超时。
+  await assertRemoteRepositoryConnectivity(
+    resolvedSource.inputSource,
+    resolvedSource.repositoryUrl
+  );
+
   const workspaceDirectory = await mkdtemp(
     path.join(tmpdir(), "frontend-audit-remote-")
   );
 
   try {
     // 远程模式不再依赖平台 API，而是统一通过 Git 构造一个最小工作区。
-    // repositoryUrl 在来源解析层已经被规整为“实际要执行的 SSH 地址”。
+    // repositoryUrl 在来源解析层已经被规整为“实际要执行的仓库地址”。
+    // GitHub / GitLab / Gitee 会保留用户原始协议，其他 HTTP(S) 地址会转成 SSH。
     await runGitCommand(
       [
         "clone",

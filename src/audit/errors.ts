@@ -46,6 +46,66 @@ export class InvalidAuditSourceError extends AuditError {
   }
 }
 
+function normalizeRemoteConnectivityReason(cause: unknown, timeoutMs: number) {
+  const seconds = Math.ceil(timeoutMs / 1000);
+
+  if (typeof cause === "object" && cause !== null) {
+    const errorCode =
+      "code" in cause && typeof cause.code === "string" ? cause.code : null;
+
+    switch (errorCode) {
+      case "ETIMEDOUT":
+        return `TCP connection timed out after ${seconds}s (ETIMEDOUT).`;
+      case "ECONNREFUSED":
+        return "The target host refused the TCP connection (ECONNREFUSED).";
+      case "ENOTFOUND":
+        return "The target host could not be resolved by DNS (ENOTFOUND).";
+      case "EAI_AGAIN":
+        return "DNS lookup did not complete successfully (EAI_AGAIN).";
+      case "EHOSTUNREACH":
+        return "The target host is unreachable from the current machine (EHOSTUNREACH).";
+      case "ENETUNREACH":
+        return "The current network cannot reach the target host (ENETUNREACH).";
+    }
+
+    if ("message" in cause && typeof cause.message === "string" && cause.message.trim()) {
+      return cause.message.trim();
+    }
+  }
+
+  return "No further details were returned by the connectivity probe.";
+}
+
+export class RemoteConnectivityError extends AuditError {
+  readonly cause?: unknown;
+  readonly repositoryUrl: string;
+  readonly hostname: string;
+  readonly port: number;
+  readonly timeoutMs: number;
+
+  constructor(
+    source: string,
+    repositoryUrl: string,
+    hostname: string,
+    port: number,
+    timeoutMs: number,
+    cause?: unknown
+  ) {
+    const seconds = Math.ceil(timeoutMs / 1000);
+    const reason = normalizeRemoteConnectivityReason(cause, timeoutMs);
+
+    super(
+      `Remote repository connectivity check failed for "${source}". Repository URL: "${repositoryUrl}". Host: ${hostname}. Port: ${port}. Timeout: ${seconds}s. ${reason}`,
+      "REMOTE_CONNECTIVITY_FAILED"
+    );
+    this.cause = cause;
+    this.repositoryUrl = repositoryUrl;
+    this.hostname = hostname;
+    this.port = port;
+    this.timeoutMs = timeoutMs;
+  }
+}
+
 export class GitCommandError extends AuditError {
   readonly cause?: unknown;
   readonly command: string;

@@ -19,21 +19,18 @@ import { renderTextReport } from "./report/text-report";
 import type { PackageAuditOptions, PackageAuditResult } from "./types";
 
 export async function runPackageAudit(
-  options?: undefined
-): Promise<string>;
-export async function runPackageAudit(
-  options?: PackageAuditOptions & { outputFormat?: "text" }
+  options: PackageAuditOptions & { outputFormat?: "text" }
 ): Promise<string>;
 export async function runPackageAudit(
   options: PackageAuditOptions & { outputFormat: "json" }
 ): Promise<PackageAuditResult>;
 export async function runPackageAudit(
-  options?: PackageAuditOptions
+  options: PackageAuditOptions
 ): Promise<PackageAuditResult | string>;
 export async function runPackageAudit(
-  options: PackageAuditOptions = {}
+  options: PackageAuditOptions
 ): Promise<PackageAuditResult | string> {
-  const source = options.source ?? process.cwd();
+  const source = options.source;
   const resolvedSource = await resolveAuditSource(source);
   const workspace = await prepareAuditWorkspace(resolvedSource);
   let result: PackageAuditResult | null = null;

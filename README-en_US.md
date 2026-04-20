@@ -66,7 +66,7 @@ npx locklens --source /path/to/project --skip-dev
 
 | Argument | Description |
 | --- | --- |
-| `--source <value>` | Local directory path or remote Git repository URL |
+| `--source <value>` | Required. Local directory path or remote Git repository URL |
 | `--threshold <value>` | Vulnerability severity threshold. Options: `low`, `moderate`, `high`, `critical`. Default: `low` |
 | `--registry <url>` | Custom npm registry. Default: `https://registry.npmjs.org/` |
 | `--skip-dev` | Skip dev dependencies |
@@ -116,7 +116,7 @@ Audits the lockfile of a target local project directory or remote Git repository
 
 **Parameters:**
 - `source`
-    - Absolute local directory path or remote Git repository URL; defaults to the current working directory
+    - Required. Absolute local directory path or remote Git repository URL
 - `threshold`
     - Vulnerability severity threshold. Options: `low`, `moderate`, `high`, `critical`; default: `low`
 - `registry`

@@ -12,11 +12,15 @@ export interface CliRunOptions {
   outputFormatLanguage?: CliOutputFormatLanguage
 }
 
+export interface ValidatedCliRunOptions extends CliRunOptions {
+  source: string
+}
+
 export type ParsedCliArgs =
   | { mode: 'mcp' }
   | { mode: 'help' }
   | { mode: 'version' }
-  | { mode: 'run'; options: CliRunOptions }
+  | { mode: 'run'; options: ValidatedCliRunOptions }
 
 const VALID_THRESHOLDS: CliThreshold[] = ['low', 'moderate', 'high', 'critical']
 const VALID_OUTPUT_FORMATS: CliOutputFormat[] = ['json', 'text']
@@ -131,9 +135,13 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
     }
   }
 
+  if (!options.source) {
+    throw new CliArgumentError('Missing required argument: --source.')
+  }
+
   return {
     mode: 'run',
-    options,
+    options: options as ValidatedCliRunOptions,
   }
 }
 
@@ -145,7 +153,7 @@ export function buildCliHelpText(packageName: string) {
     `  npx ${packageName} --source <value> [flags]`,
     '',
     'Flags:',
-    '  --source <value>         Local directory path or remote Git repository URL',
+    '  --source <value>         Required. Local directory path or remote Git repository URL',
     '  --threshold <value>      low | moderate | high | critical (default: low)',
     '  --registry <url>         Custom registry URL passed to audit execution (default: https://registry.npmjs.org/)',
     '  --skip-dev               Skip dev dependencies during audit',

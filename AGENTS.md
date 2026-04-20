@@ -62,13 +62,12 @@
 
 - 本地目录：`source: "/path/to/project"`
 - 远程仓库：`source: "https://github.com/org/repo.git"` 或 `git@host:group/repo.git`
-- 缺省：`process.cwd()`
 
 ## 远程仓库协议规则
 
 当前远程协议策略如下：
 
-1. `github.com` / `gitlab.com`
+1. `github.com` / `gitlab.com` / `gitee.com`
    - 用户传 HTTPS，则按 HTTPS 执行
    - 用户传 SSH，则按 SSH 执行
 
@@ -80,6 +79,8 @@
 
 - 工具不接管交互认证
 - 只支持“本机 Git 已具备无交互访问能力”的仓库
+- 在真正执行 `git clone` 之前，会先做一次基于 Git 协议的 TCP 连通性预检查，不使用系统 `ping`
+- 远程连通性预检查默认超时为 `5s`，若主机不可达、DNS 失败或目标端口不通，会直接报错，不再进入 Git clone 阶段
 - Git 命令显式禁用交互提示
 
 ## Yarn 适配说明
@@ -198,7 +199,7 @@ yarn test:cli
 
 1. 不要把 Yarn 适配逻辑和 npm / pnpm 混在一起
 2. 修改远程仓库协议规则时，要同时考虑：
-   - GitHub / GitLab 公网仓库
+   - GitHub / GitLab / Gitee 公网仓库
    - 公司内网 / 自建 Git 服务
 3. 自动化测试应优先验证 `build/client.js`
 4. `src/tests/` 是手动联调，不要把它当成正式单测

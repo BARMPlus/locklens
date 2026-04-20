@@ -32,7 +32,7 @@ function createAuditServer() {
     {
       description: 'Audit a local project or remote Git repository lockfile and return normalized package vulnerability results.',
       inputSchema: {
-        source: z.string().optional().describe('Local directory path or remote Git repository URL'),
+        source: z.string().describe('Required. Local directory path or remote Git repository URL'),
         threshold: z.enum(['low', 'moderate', 'high', 'critical']).optional().describe('Minimum threshold that controls the returned advisories list. Defaults to low.'),
         registry: z.string().optional().describe('Custom registry URL used during audit execution. Defaults to https://registry.npmjs.org/.'),
         skipDev: z.boolean().optional().describe('Whether to skip dev dependencies during audit'),
@@ -105,7 +105,6 @@ async function main() {
   if (hasCliInvocation(args)) {
     try {
       const parsed = parseCliArgs(args)
-
       switch (parsed.mode) {
         case 'help':
           process.stdout.write(`${buildCliHelpText(packageJson.name)}\n`)

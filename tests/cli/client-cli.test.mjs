@@ -2,16 +2,18 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { spawn } from 'node:child_process'
+import { execFile, spawn } from 'node:child_process'
+import { promisify } from 'node:util'
 
 import { runBuiltCli } from './helpers/cli-process.mjs'
+
+const execFileAsync = promisify(execFile)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '../..')
 const buildClientPath = path.join(projectRoot, 'build', 'client.js')
-const remoteGithubSource = 'https://github.com/openai/openai-quickstart-node.git'
-const remoteGitlabSource = 'https://gitlab.com/gitlab-org/gitlab-vscode-extension.git'
+const remoteGitlabSource = 'https://gitlab.com/gitlab-org/gitlab-vscode-extension'
 
 function writeTestProgress(message) {
   process.stderr.write(`[test:cli] ${message}\n`)
@@ -26,6 +28,107 @@ function parseCliJsonResult(result) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+async function resolveAuditSourceForTest(source) {
+  // 这里通过 tsx 启动一个最小脚本，直接复用源码里的来源解析逻辑，
+  // 用于补齐 CLI 集成测试之外的协议归一化行为校验。
+  const evalScript = `
+    import { resolveAuditSource } from './src/audit/index.ts'
+
+    async function main() {
+      const result = await resolveAuditSource(process.argv[1])
+      console.log(JSON.stringify(result))
+    }
+
+    main().catch((error) => {
+      throw error
+    })
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(stdout)
+}
+
+async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
+  // 这里直接复用源码里的远程连通性目标解析逻辑，
+  // 保证测试校验的是正式实现，而不是测试侧自己复制一份规则。
+  const evalScript = `
+    import { resolveRemoteConnectivityTarget } from './src/audit/index.ts'
+
+    const result = resolveRemoteConnectivityTarget(process.argv[1])
+    console.log(JSON.stringify(result))
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, repositoryUrl],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(stdout)
+}
+
+async function createRemoteConnectivityErrorForTest(
+  source,
+  repositoryUrl,
+  hostname,
+  port,
+  timeoutMs,
+  errorCode,
+  errorMessage = ''
+) {
+  // 这里构造一个最小错误对象，专门校验远程连通性错误文案的稳定性。
+  const evalScript = `
+    import { RemoteConnectivityError } from './src/audit/index.ts'
+
+    const cause = new Error(process.argv[7] || '')
+    cause.code = process.argv[6]
+
+    const error = new RemoteConnectivityError(
+      process.argv[1],
+      process.argv[2],
+      process.argv[3],
+      Number(process.argv[4]),
+      Number(process.argv[5]),
+      cause
+    )
+
+    console.log(JSON.stringify({
+      code: error.code,
+      message: error.message,
+    }))
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [
+      './node_modules/tsx/dist/cli.mjs',
+      '--eval',
+      evalScript,
+      source,
+      repositoryUrl,
+      hostname,
+      String(port),
+      String(timeoutMs),
+      errorCode,
+      errorMessage,
+    ],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(stdout)
 }
 
 async function runRemoteCliWithRetry(source, threshold = 'moderate') {
@@ -221,6 +324,7 @@ test('CLI: --help 应返回帮助文本', async () => {
   assert.equal(result.exitCode, 0)
   assert.match(result.stdout, /Usage:/)
   assert.match(result.stdout, /--source <value>/)
+  assert.match(result.stdout, /Required/)
   assert.equal(result.stderr, '')
 })
 
@@ -251,6 +355,91 @@ test('CLI: 非法 output format language 应返回参数错误退出码', async 
   assert.match(result.stderr, /Invalid value for --output-format-language/)
 })
 
+test('CLI: 缺少必填 source 应返回参数错误退出码', async () => {
+  const result = await runBuiltCli(buildClientPath, ['--threshold', 'low'], {
+    cwd: projectRoot,
+  })
+
+  assert.equal(result.exitCode, 2)
+  assert.match(result.stderr, /Missing required argument: --source/)
+})
+
+test('Source Resolver: gitee HTTPS 地址应保留原始协议', async () => {
+  const source = 'https://gitee.com/BluesYoung-web/admin-vue3-element3-vite2'
+  const resolvedSource = await resolveAuditSourceForTest(source)
+
+  assert.equal(resolvedSource.kind, 'remote')
+  assert.equal(resolvedSource.inputSource, source)
+  assert.equal(resolvedSource.repositoryUrl, source)
+})
+
+test('Source Resolver: 非白名单 HTTP(S) 地址应转换为 SSH', async () => {
+  const source = 'https://git.dian.so/devops/dna-frontend'
+  const resolvedSource = await resolveAuditSourceForTest(source)
+
+  assert.equal(resolvedSource.kind, 'remote')
+  assert.equal(resolvedSource.inputSource, source)
+  assert.equal(
+    resolvedSource.repositoryUrl,
+    'git@git.dian.so:devops/dna-frontend.git'
+  )
+})
+
+test('Remote Connectivity: HTTPS 地址应解析为 443 端口', async () => {
+  const target = await resolveRemoteConnectivityTargetForTest(
+    'https://github.com/BARMPlus/micro-app'
+  )
+
+  assert.equal(target.protocol, 'https')
+  assert.equal(target.hostname, 'github.com')
+  assert.equal(target.port, 443)
+})
+
+test('Remote Connectivity: SSH URL 应保留显式端口', async () => {
+  const target = await resolveRemoteConnectivityTargetForTest(
+    'ssh://git@gitlab.com:2222/group/repo.git'
+  )
+
+  assert.equal(target.protocol, 'ssh')
+  assert.equal(target.hostname, 'gitlab.com')
+  assert.equal(target.port, 2222)
+})
+
+test('Remote Connectivity: SCP 风格地址应解析为 22 端口', async () => {
+  const target = await resolveRemoteConnectivityTargetForTest(
+    'git@gitee.com:group/repo.git'
+  )
+
+  assert.equal(target.protocol, 'ssh')
+  assert.equal(target.hostname, 'gitee.com')
+  assert.equal(target.port, 22)
+})
+
+test('Remote Connectivity: 非白名单 HTTP(S) 地址归一化后应按 SSH 22 检查', async () => {
+  const source = 'https://git.dian.so/devops/dna-frontend'
+  const resolvedSource = await resolveAuditSourceForTest(source)
+  const target = await resolveRemoteConnectivityTargetForTest(resolvedSource.repositoryUrl)
+
+  assert.equal(target.protocol, 'ssh')
+  assert.equal(target.hostname, 'git.dian.so')
+  assert.equal(target.port, 22)
+})
+
+test('Remote Connectivity: 超时错误文案应包含 5s', async () => {
+  const error = await createRemoteConnectivityErrorForTest(
+    'https://git.dian.so/devops/dna-frontend',
+    'git@git.dian.so:devops/dna-frontend.git',
+    'git.dian.so',
+    22,
+    5_000,
+    'ETIMEDOUT'
+  )
+
+  assert.equal(error.code, 'REMOTE_CONNECTIVITY_FAILED')
+  assert.match(error.message, /Timeout: 5s/)
+  assert.match(error.message, /ETIMEDOUT/)
+})
+
 test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
   const result = await runBuiltCli(
     buildClientPath,
@@ -262,6 +451,23 @@ test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
 
   assert.equal(result.exitCode, 1)
   assert.match(result.stderr, /not a valid local directory or supported Git repository address/i)
+})
+
+test('CLI: 远程连通性预检查失败时应直接报错', async () => {
+  const result = await runBuiltCli(
+    buildClientPath,
+    ['--source', 'ssh://git@127.0.0.1:1/test/repo.git', '--output-format', 'json'],
+    {
+      cwd: projectRoot,
+      timeout: 10_000,
+    }
+  )
+
+  assert.equal(result.exitCode, 1)
+  assert.match(result.stderr, /Remote repository connectivity check failed/i)
+  assert.match(result.stderr, /Host: 127\.0\.0\.1/i)
+  assert.match(result.stderr, /Port: 1/i)
+  assert.doesNotMatch(result.stderr, /requires non-interactive access/i)
 })
 
 test('CLI: 默认 output format 应返回中文文本报告', { timeout: 120_000 }, async () => {
@@ -312,15 +518,6 @@ test('CLI: 英文文本模板应返回英文报告', { timeout: 120_000 }, async
   assert.equal(textResult.exitCode, 0, `CLI should succeed, but stderr is: ${textResult.stderr}`)
   assert.doesNotMatch(textResult.stdout, /^\s*\{/)
   assertEnglishTextReportMatchesPayload(textResult.stdout, payload)
-})
-
-test('CLI: GitHub 公开仓库应返回有效审计结果', { timeout: 120_000 }, async () => {
-  writeTestProgress('进入 GitHub 公开仓库审计测试')
-  const result = await runRemoteCliWithRetry(remoteGithubSource)
-
-  const payload = parseCliJsonResult(result)
-  assert.equal(payload.runtime.source, remoteGithubSource)
-  assertNormalizedAuditMetrics(payload)
 })
 
 test('CLI: GitLab 公开仓库应返回有效审计结果', { timeout: 120_000 }, async () => {

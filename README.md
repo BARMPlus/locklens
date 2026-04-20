@@ -67,7 +67,7 @@ npx -y locklens --source /path/to/project --skip-dev
 
 | 参数 | 说明 |
 | --- | --- |
-| `--source <value>` | 本地目录路径或远程 Git 仓库地址 |
+| `--source <value>` | 必填。本地目录路径或远程 Git 仓库地址 |
 | `--threshold <value>` | 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`，默认：`low` |
 | `--registry <url>` | 自定义 npm registry，默认：`https://registry.npmjs.org/` |
 | `--skip-dev` | 跳过 dev dependencies |
@@ -117,7 +117,7 @@ Windows 平台：
 
 **参数：**
 - `source`
-    - 本地目录绝对路径，或远程 Git 仓库地址；默认使用当前工作目录
+    - 必填。本地目录绝对路径，或远程 Git 仓库地址
 - `threshold`
     - 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`；默认：`low`
 - `registry`

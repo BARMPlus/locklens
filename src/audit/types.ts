@@ -25,6 +25,7 @@ export type SupportedSeverity =
   | "moderate"
   | "high"
   | "critical";
+export type RemoteConnectivityProtocol = "https" | "ssh";
 
 export interface LockfileDetectionResult {
   directory: string;
@@ -35,7 +36,7 @@ export interface LockfileDetectionResult {
 }
 
 export interface PackageAuditOptions {
-  source?: string;
+  source: string;
   threshold?: AuditThreshold;
   allowlist?: AllowlistRecord[];
   skipDev?: boolean;
@@ -134,6 +135,13 @@ export interface PreparedAuditWorkspace {
   repositoryUrl: string | null;
   resolvedRef: string | null;
   cleanup: () => Promise<void>;
+}
+
+export interface RemoteConnectivityTarget {
+  protocol: RemoteConnectivityProtocol;
+  hostname: string;
+  port: number;
+  repositoryUrl: string;
 }
 
 export interface NormalizerContext {
