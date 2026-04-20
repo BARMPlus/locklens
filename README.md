@@ -26,10 +26,11 @@
 直接使用：
 
 ```bash
-npx locklens --source /path/to/project # 本地仓库审计
-npx locklens --source https://github.com/openai/openai-quickstart-node.git > audit.md # Github 远程仓库审计
-npx locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json # Gitlab 远程仓库审计
-npx locklens --source https://github.com/org/repo.git # 支持私有仓库审计，前提是你本机的SSH Key有权限访问该仓库
+npx -y locklens --source ./ # 审计当前目录
+npx -y locklens --source /path/to/project # 本地仓库审计
+npx -y locklens --source https://github.com/BARMPlus/micro-app > audit.md # Github 远程仓库审计
+npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json # Gitlab 远程仓库审计
+npx -y locklens --source https://github.com/org/repo.git # 支持私有仓库审计，前提是你本机的SSH Key有权限访问该仓库
 ```
 
 ---
@@ -41,25 +42,25 @@ npx locklens --source https://github.com/org/repo.git # 支持私有仓库审计
 输出英文文本报告：
 
 ```bash
-npx locklens --source /path/to/project --output-format-language en
+npx -y locklens --source /path/to/project --output-format-language en
 ```
 
 输出 JSON：
 
 ```bash
-npx locklens --source /path/to/project --output-format json
+npx -y locklens --source /path/to/project --output-format json
 ```
 
 指定阈值为高危：
 
 ```bash
-npx locklens --source /path/to/project --threshold high
+npx -y locklens --source /path/to/project --threshold high
 ```
 
 跳过 devDependencies：
 
 ```bash
-npx locklens --source /path/to/project --skip-dev
+npx -y locklens --source /path/to/project --skip-dev
 ```
 
 ### CLI 参数
@@ -68,7 +69,7 @@ npx locklens --source /path/to/project --skip-dev
 | --- | --- |
 | `--source <value>` | 本地目录路径或远程 Git 仓库地址 |
 | `--threshold <value>` | 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`，默认：`low` |
-| `--registry <url>` | 自定义 npm registry |
+| `--registry <url>` | 自定义 npm registry，默认：`https://registry.npmjs.org/` |
 | `--skip-dev` | 跳过 dev dependencies |
 | `--retry-count <number>` | 审计执行重试次数 |
 | `--output-format <value>` | 输出格式，可选：`json`、`text`，默认：`text` |
@@ -120,7 +121,7 @@ Windows 平台：
 - `threshold`
     - 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`；默认：`low`
 - `registry`
-    - 自定义 npm registry 地址
+    - 自定义 npm registry 地址；默认：`https://registry.npmjs.org/`
 - `skipDev`
     - 是否跳过 dev dependencies
 - `retryCount`

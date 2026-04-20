@@ -68,7 +68,7 @@ npx locklens --source /path/to/project --skip-dev
 | --- | --- |
 | `--source <value>` | Local directory path or remote Git repository URL |
 | `--threshold <value>` | Vulnerability severity threshold. Options: `low`, `moderate`, `high`, `critical`. Default: `low` |
-| `--registry <url>` | Custom npm registry |
+| `--registry <url>` | Custom npm registry. Default: `https://registry.npmjs.org/` |
 | `--skip-dev` | Skip dev dependencies |
 | `--retry-count <number>` | Retry count for audit execution |
 | `--output-format <value>` | Output format. Options: `json`, `text`. Default: `text` |
@@ -120,7 +120,7 @@ Audits the lockfile of a target local project directory or remote Git repository
 - `threshold`
     - Vulnerability severity threshold. Options: `low`, `moderate`, `high`, `critical`; default: `low`
 - `registry`
-    - Custom npm registry URL
+    - Custom npm registry URL; default: `https://registry.npmjs.org/`
 - `skipDev`
     - Whether to skip dev dependencies
 - `retryCount`
@@ -138,4 +138,3 @@ Audits the lockfile of a target local project directory or remote Git repository
 Copyright (c) 2026 chenglin
 
 locklens is released under the [MIT License](LICENSE)
-

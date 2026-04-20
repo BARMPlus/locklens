@@ -6,10 +6,7 @@ import {
   type Summary as AuditCiSummary,
 } from "audit-ci";
 
-import {
-  DEFAULT_OUTPUT_FORMAT,
-  DEFAULT_REPORT_TYPE,
-} from "../constants";
+import { DEFAULT_REPORT_TYPE } from "../constants";
 import { AuditExecutionError } from "../errors";
 import type {
   AuditCiAdapterInput,
@@ -89,7 +86,7 @@ export async function runLibraryAuditAdapter(
     allowlist: input.allowlist,
     directory: input.detection.directory,
     "package-manager": input.detection.packageManager,
-    "output-format": DEFAULT_OUTPUT_FORMAT,
+    "output-format": 'text',
     "report-type": DEFAULT_REPORT_TYPE,
     "skip-dev": input.skipDev,
     "retry-count": input.retryCount,

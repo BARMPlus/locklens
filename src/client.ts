@@ -34,7 +34,7 @@ function createAuditServer() {
       inputSchema: {
         source: z.string().optional().describe('Local directory path or remote Git repository URL'),
         threshold: z.enum(['low', 'moderate', 'high', 'critical']).optional().describe('Minimum threshold that controls the returned advisories list. Defaults to low.'),
-        registry: z.string().optional().describe('Custom registry URL used during audit execution'),
+        registry: z.string().optional().describe('Custom registry URL used during audit execution. Defaults to https://registry.npmjs.org/.'),
         skipDev: z.boolean().optional().describe('Whether to skip dev dependencies during audit'),
         retryCount: z.number().int().min(0).optional().describe('Retry count passed to the audit executor'),
         outputFormat: z.enum(['json', 'text']).optional().describe('Response format. Defaults to text.'),

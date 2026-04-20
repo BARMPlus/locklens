@@ -14,6 +14,9 @@ export const AUDIT_OUTPUT_FORMATS = ["json", "text"] as const;
 export const DEFAULT_OUTPUT_FORMAT_LANGUAGE = "zh" as const;
 export const AUDIT_OUTPUT_FORMAT_LANGUAGES = ["zh", "en"] as const;
 
+// 默认 npm 源
+export const DEFAULT_AUDIT_REGISTRY =  "https://registry.npmjs.org/" as const;
+
 export const EMPTY_VULNERABILITIES = {
   info: null,
   low: null,

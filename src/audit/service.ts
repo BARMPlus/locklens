@@ -4,6 +4,7 @@ import {
   DEFAULT_AUDIT_THRESHOLD,
   DEFAULT_OUTPUT_FORMAT,
   DEFAULT_OUTPUT_FORMAT_LANGUAGE,
+  DEFAULT_AUDIT_REGISTRY,
 } from "./constants";
 import { resolveAuditSource } from "./git-source/source-resolver";
 import { prepareAuditWorkspace } from "./git-workspace/remote-workspace";
@@ -48,7 +49,7 @@ export async function runPackageAudit(
       threshold: options.threshold ?? DEFAULT_AUDIT_THRESHOLD,
       allowlist: options.allowlist ?? ([] as AllowlistRecord[]),
       skipDev: options.skipDev ?? false,
-      registry: options.registry,
+      registry: options.registry ?? DEFAULT_AUDIT_REGISTRY,
       retryCount: options.retryCount,
       passEnoAudit: options.passEnoAudit,
       extraArgs: options.extraArgs,
