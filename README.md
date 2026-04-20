@@ -23,15 +23,29 @@
 
 - `node >= 18`
 
-直接使用：
+本地仓库、线上仓库审计：
 
 ```bash
-npx -y locklens --source ./ # 审计当前目录
-npx -y locklens --source /path/to/project # 本地仓库审计
-npx -y locklens --source https://github.com/BARMPlus/micro-app > audit.md # Github 远程仓库审计
-npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json # Gitlab 远程仓库审计
-npx -y locklens --source https://github.com/org/repo.git # 支持私有仓库审计，前提是你本机的SSH Key有权限访问该仓库
+# 本地相对目录审计
+npx -y locklens --source ./
+# 本地绝对目录审计
+npx -y locklens --source /path/to/project 
+# Github 远程仓库审计
+npx -y locklens --source https://github.com/BARMPlus/micro-app > audit.md
+# Gitlab 远程仓库审计
+npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json 
 ```
+
+私有仓库审计：
+
+```bash
+# 支持Github、Gitlab Private 应用审计、支持私有部署的 Git 服务器应用审计，前提是你本机的 SSH Key 有权限访问该仓库
+npx -y locklens --source https://git.company.local/group/repo.git
+# 适合 CI 场景，仅支持 私有部署的 GitLab 服务器应用审计，设置 Personal access tokens 权限访问该仓库
+LOCKLENS_GITLAB_PRIVATE_TOKEN=your-token npx -y locklens --source https://git.company.local/group/repo.git 
+````
+
+
 
 ---
 

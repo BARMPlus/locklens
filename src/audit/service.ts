@@ -16,6 +16,7 @@ import {
 } from "./normalizers/advisories";
 import { normalizeMetadata } from "./normalizers/metadata";
 import { renderTextReport } from "./report/text-report";
+import { cleanupExpiredTempArtifacts } from "./temp-artifact-maintenance";
 import type { PackageAuditOptions, PackageAuditResult } from "./types";
 
 export async function runPackageAudit(
@@ -30,6 +31,9 @@ export async function runPackageAudit(
 export async function runPackageAudit(
   options: PackageAuditOptions
 ): Promise<PackageAuditResult | string> {
+  // 每次审计启动前都先清理一轮过期临时残留，避免异常退出后把旧目录一直堆积在系统临时目录里。
+  await cleanupExpiredTempArtifacts();
+
   const source = options.source;
   const resolvedSource = await resolveAuditSource(source);
   const workspace = await prepareAuditWorkspace(resolvedSource);

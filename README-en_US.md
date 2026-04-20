@@ -23,13 +23,28 @@ It can audit a local project directory or a remote Git repository, and supports 
 
 - `node >= 18`
 
-Quick usage:
+Audit local and remote repositories:
 
 ```bash
-npx locklens --source /path/to/project # Audit a local repository
-npx locklens --source https://github.com/openai/openai-quickstart-node.git > audit.md # Audit a remote GitHub repository
-npx locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json # Audit a remote GitLab repository
-npx locklens --source https://github.com/org/repo.git # Private repositories are supported if your local SSH key has access to the repository
+# Audit a local relative directory
+npx -y locklens --source ./
+# Audit a local absolute directory
+npx -y locklens --source /path/to/project
+# Audit a remote GitHub repository
+npx -y locklens --source https://github.com/BARMPlus/micro-app > audit.md
+# Audit a remote GitLab repository
+npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json
+```
+
+Audit private repositories:
+
+```bash
+# Supports auditing private repositories on GitHub, GitLab, and privately deployed Git servers,
+# as long as your local SSH key has permission to access the repository
+npx -y locklens --source https://git.company.local/group/repo.git
+# Recommended for CI scenarios. Only supports privately deployed GitLab servers.
+# Configure a Personal Access Token with permission to access the repository
+LOCKLENS_GITLAB_PRIVATE_TOKEN=your-token npx -y locklens --source https://git.company.local/group/repo.git
 ```
 
 ---

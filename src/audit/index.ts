@@ -5,6 +5,9 @@ export {
   assertRemoteRepositoryConnectivity,
   resolveRemoteConnectivityTarget,
 } from "./remote-connectivity";
-export { prepareAuditWorkspace } from "./git-workspace/remote-workspace";
+export {
+  prepareAuditWorkspace,
+  resolveRemoteWorkspaceProviderPlan,
+} from "./git-workspace/remote-workspace";
 export * from "./errors";
 export * from "./types";

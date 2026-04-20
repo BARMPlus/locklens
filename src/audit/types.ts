@@ -26,6 +26,10 @@ export type SupportedSeverity =
   | "high"
   | "critical";
 export type RemoteConnectivityProtocol = "https" | "ssh";
+export type RemoteWorkspaceProviderName =
+  | "gitlab"
+  | "gitlab-self-managed"
+  | "git-clone";
 
 export interface LockfileDetectionResult {
   directory: string;
@@ -142,6 +146,12 @@ export interface RemoteConnectivityTarget {
   hostname: string;
   port: number;
   repositoryUrl: string;
+}
+
+export interface RemoteWorkspaceProviderPlan {
+  name: RemoteWorkspaceProviderName;
+  connectivityRepositoryUrl: string;
+  tokenEnvName: string | null;
 }
 
 export interface NormalizerContext {

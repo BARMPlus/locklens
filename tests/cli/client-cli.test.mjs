@@ -78,6 +78,42 @@ async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
   return JSON.parse(stdout)
 }
 
+async function resolveRemoteWorkspaceProviderPlanForTest(source, envOverrides = {}) {
+  // provider 计划是远程编排层的纯决策结果。
+  // 这里直接拿正式实现来校验“命中了哪个 provider，以及前置 TCP 校验该探测哪个目标”。
+  const evalScript = `
+    import { resolveAuditSource, resolveRemoteWorkspaceProviderPlan } from './src/audit/index.ts'
+
+    async function main() {
+      const resolvedSource = await resolveAuditSource(process.argv[1])
+      if (resolvedSource.kind !== 'remote') {
+        throw new Error('Expected a remote source.')
+      }
+
+      const plan = resolveRemoteWorkspaceProviderPlan(resolvedSource)
+      console.log(JSON.stringify(plan))
+    }
+
+    main().catch((error) => {
+      throw error
+    })
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source],
+    {
+      cwd: projectRoot,
+      env: {
+        ...process.env,
+        ...envOverrides,
+      },
+    }
+  )
+
+  return JSON.parse(stdout)
+}
+
 async function createRemoteConnectivityErrorForTest(
   source,
   repositoryUrl,
@@ -438,6 +474,71 @@ test('Remote Connectivity: 超时错误文案应包含 5s', async () => {
   assert.equal(error.code, 'REMOTE_CONNECTIVITY_FAILED')
   assert.match(error.message, /Timeout: 5s/)
   assert.match(error.message, /ETIMEDOUT/)
+})
+
+test('Remote Provider: gitlab.com + GitLab token 应命中 GitLab provider', async () => {
+  const plan = await resolveRemoteWorkspaceProviderPlanForTest(
+    'https://gitlab.com/group/repo.git',
+    {
+      LOCKLENS_GITLAB_TOKEN: 'gitlab-token',
+    }
+  )
+
+  assert.equal(plan.name, 'gitlab')
+  assert.equal(plan.connectivityRepositoryUrl, 'https://gitlab.com/api/v4')
+  assert.equal(plan.tokenEnvName, 'LOCKLENS_GITLAB_TOKEN')
+})
+
+test('Remote Provider: gitlab.com + 仅 private token 应回退 clone provider', async () => {
+  const source = 'https://gitlab.com/group/repo.git'
+  const plan = await resolveRemoteWorkspaceProviderPlanForTest(source, {
+    LOCKLENS_GITLAB_PRIVATE_TOKEN: 'private-token',
+  })
+
+  assert.equal(plan.name, 'git-clone')
+  assert.equal(plan.connectivityRepositoryUrl, source)
+  assert.equal(plan.tokenEnvName, null)
+})
+
+test('Remote Provider: 私有域名 + private token 应命中 self-managed provider', async () => {
+  const plan = await resolveRemoteWorkspaceProviderPlanForTest(
+    'https://git.dian.so/devops/dna-frontend.git',
+    {
+      LOCKLENS_GITLAB_PRIVATE_TOKEN: 'private-token',
+    }
+  )
+
+  assert.equal(plan.name, 'gitlab-self-managed')
+  assert.equal(plan.connectivityRepositoryUrl, 'https://git.dian.so/api/v4')
+  assert.equal(plan.tokenEnvName, 'LOCKLENS_GITLAB_PRIVATE_TOKEN')
+})
+
+test('Remote Provider: 私有域名 + 仅 GitLab token 应回退 clone provider', async () => {
+  const plan = await resolveRemoteWorkspaceProviderPlanForTest(
+    'https://git.dian.so/devops/dna-frontend.git',
+    {
+      LOCKLENS_GITLAB_TOKEN: 'gitlab-token',
+    }
+  )
+
+  assert.equal(plan.name, 'git-clone')
+  assert.equal(
+    plan.connectivityRepositoryUrl,
+    'git@git.dian.so:devops/dna-frontend.git'
+  )
+  assert.equal(plan.tokenEnvName, null)
+})
+
+test('Remote Provider: github 不应命中 GitLab providers', async () => {
+  const source = 'https://github.com/BARMPlus/micro-app'
+  const plan = await resolveRemoteWorkspaceProviderPlanForTest(source, {
+    LOCKLENS_GITLAB_TOKEN: 'gitlab-token',
+    LOCKLENS_GITLAB_PRIVATE_TOKEN: 'private-token',
+  })
+
+  assert.equal(plan.name, 'git-clone')
+  assert.equal(plan.connectivityRepositoryUrl, source)
+  assert.equal(plan.tokenEnvName, null)
 })
 
 test('CLI: 不存在的 source 应返回简洁错误信息', async () => {

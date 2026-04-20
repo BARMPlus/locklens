@@ -81,7 +81,22 @@
 - 只支持“本机 Git 已具备无交互访问能力”的仓库
 - 在真正执行 `git clone` 之前，会先做一次基于 Git 协议的 TCP 连通性预检查，不使用系统 `ping`
 - 远程连通性预检查默认超时为 `5s`，若主机不可达、DNS 失败或目标端口不通，会直接报错，不再进入 Git clone 阶段
+- 当前远程 provider 分为三类：
+  - `GitLab provider`
+    - 仅用于 `gitlab.com`
+    - 仅使用 `LOCKLENS_GITLAB_TOKEN`
+  - `GitLab Self-Managed provider`
+    - 仅用于除 `github.com` / `gitee.com` / `gitlab.com` 外的其他 Git 域名
+    - 当前默认把这些域名视为 GitLab 自建实例候选
+    - 仅使用 `LOCKLENS_GITLAB_PRIVATE_TOKEN`
+  - `Git clone provider`
+    - 作为最终兜底路径，保持现有 Git clone 语义
+- TCP 连通性预检查是所有远程 provider 的统一前置校验，不属于某一个 provider 内部逻辑
+- `LOCKLENS_GITLAB_TOKEN` 与 `LOCKLENS_GITLAB_PRIVATE_TOKEN` 不混用，也不会交叉回退
 - Git 命令显式禁用交互提示
+- locklens 运行时临时资源统一使用 `locklens-frontend-audit-*` 前缀
+- 每次审计启动前都会尝试清理系统临时目录下超过 `24 小时` 的同前缀历史残留
+- 正常执行结束后仍会立即执行当前工作区 cleanup；启动前清理只是用于兜底异常退出后的遗留目录/文件
 
 ## Yarn 适配说明
 

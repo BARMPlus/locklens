@@ -8,7 +8,10 @@ import { finished } from 'node:stream/promises'
 
 import { gitHubAdvisoryUrlToAdvisoryId, type Summary as AuditCiSummary } from 'audit-ci'
 
-import { DEFAULT_AUDIT_REGISTRY } from '../constants'
+import {
+  DEFAULT_AUDIT_REGISTRY,
+  LOCKLENS_TEMP_ARTIFACT_PREFIX,
+} from '../constants'
 import { AuditExecutionError } from '../errors'
 import type {
   AuditCiAdapterInput,
@@ -440,7 +443,7 @@ function createTempAuditFilePath(extension: string) {
   const randomSuffix = Math.random().toString(36).slice(2, 10)
   return path.join(
     os.tmpdir(),
-    `frontend-audit-yarn-${Date.now()}-${process.pid}-${randomSuffix}.${extension}`
+    `${LOCKLENS_TEMP_ARTIFACT_PREFIX}yarn-${Date.now()}-${process.pid}-${randomSuffix}.${extension}`
   )
 }
 

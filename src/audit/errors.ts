@@ -106,6 +106,86 @@ export class RemoteConnectivityError extends AuditError {
   }
 }
 
+export class GitLabApiError extends AuditError {
+  readonly cause?: unknown;
+  readonly providerName: string;
+  readonly envName: string;
+  readonly repositoryUrl: string;
+
+  constructor(
+    message: string,
+    providerName: string,
+    envName: string,
+    repositoryUrl: string,
+    cause?: unknown,
+    code = "GITLAB_API_FAILED"
+  ) {
+    super(
+      `GitLab API request failed while preparing "${repositoryUrl}" via provider "${providerName}" using ${envName}. ${message}`,
+      code
+    );
+    this.cause = cause;
+    this.providerName = providerName;
+    this.envName = envName;
+    this.repositoryUrl = repositoryUrl;
+  }
+}
+
+export class GitLabApiAuthenticationError extends GitLabApiError {
+  constructor(
+    providerName: string,
+    envName: string,
+    repositoryUrl: string,
+    cause?: unknown
+  ) {
+    super(
+      "Authentication failed or the token does not have access to the target project.",
+      providerName,
+      envName,
+      repositoryUrl,
+      cause,
+      "GITLAB_API_AUTHENTICATION_FAILED"
+    );
+  }
+}
+
+export class GitLabApiNotFoundError extends GitLabApiError {
+  constructor(
+    providerName: string,
+    envName: string,
+    repositoryUrl: string,
+    cause?: unknown
+  ) {
+    super(
+      "The target project or requested file was not found via the GitLab API.",
+      providerName,
+      envName,
+      repositoryUrl,
+      cause,
+      "GITLAB_API_NOT_FOUND"
+    );
+  }
+}
+
+export class GitLabApiResponseError extends GitLabApiError {
+  constructor(
+    message: string,
+    providerName: string,
+    envName: string,
+    repositoryUrl: string,
+    cause?: unknown
+  ) {
+    super(
+      message,
+      providerName,
+      envName,
+      repositoryUrl,
+      cause,
+      "GITLAB_API_RESPONSE_INVALID"
+    );
+  }
+}
+
 export class GitCommandError extends AuditError {
   readonly cause?: unknown;
   readonly command: string;
