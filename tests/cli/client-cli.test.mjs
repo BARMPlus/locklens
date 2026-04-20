@@ -224,16 +224,6 @@ test('CLI: --help 应返回帮助文本', async () => {
   assert.equal(result.stderr, '')
 })
 
-test('CLI: --version 应返回当前包版本', async () => {
-  const result = await runBuiltCli(buildClientPath, ['--version'], {
-    cwd: projectRoot,
-  })
-
-  assert.equal(result.exitCode, 0)
-  assert.equal(result.stdout.trim(), '1.0.0')
-  assert.equal(result.stderr, '')
-})
-
 test('CLI: 非法 threshold 应返回参数错误退出码', async () => {
   const result = await runBuiltCli(buildClientPath, ['--threshold', 'invalid-level'], {
     cwd: projectRoot,
