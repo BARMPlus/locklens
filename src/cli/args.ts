@@ -146,7 +146,7 @@ export function buildCliHelpText(packageName: string) {
     '',
     'Flags:',
     '  --source <value>         Local directory path or remote Git repository URL',
-    '  --threshold <value>      low | moderate | high | critical',
+    '  --threshold <value>      low | moderate | high | critical (default: low)',
     '  --registry <url>         Custom registry URL passed to audit execution',
     '  --skip-dev               Skip dev dependencies during audit',
     '  --retry-count <number>   Retry count for audit execution',

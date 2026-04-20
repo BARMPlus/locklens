@@ -1,54 +1,140 @@
 # locklens
 
-`locklens` is a package lockfile auditing tool that works in two modes:
+`locklens` 是一个基于 `audit-ci` 的 lockfile 审计工具，支持两种运行模式：
 
-- MCP server mode
-- CLI / `npx` mode
+- CLI / `npx`
+- MCP Server（`stdio`）
 
-It audits npm, Yarn, and pnpm projects with a unified output structure so the
-same core capability can be reused in local tools, MCP clients, and command
-line workflows.
+它可以审计本地项目目录或远程 Git 仓库，并支持 `npm`、`yarn`、`pnpm` 的 lockfile。
 
-## Features
+---
 
-- Supports local project directories
-- Supports remote Git repositories
-- Audits `package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, and `pnpm-lock.yaml`
-- Works as both an MCP server and a direct CLI
-- Normalizes advisory output for easier consumption
+## 特性
 
-## CLI Usage
+- 支持本地项目目录审计
+- 支持远程 Git 仓库审计
+- 支持 `package-lock.json`、`yarn.lock`、`pnpm-lock.yaml`
+- 支持中文、英文文本报告
+- 支持显式切换为 JSON 输出
 
-Run directly with `npx`:
+---
 
-```bash
-npx locklens --source /path/to/project --threshold moderate
-```
+## 安装与环境
 
-Or after installation:
+- `node >= 18`
+
+直接使用：
 
 ```bash
-locklens --source /path/to/project --threshold moderate
+npx locklens --source /path/to/project # 本地仓库审计
+npx locklens --source https://github.com/openai/openai-quickstart-node.git > audit.md # Github 远程仓库审计
+npx locklens --output-format json --source https://gitlab.com/gitlab-org/gitlab-vscode-extension.git > audit.json # Gitlab 远程仓库审计
+npx locklens --source https://github.com/org/repo.git # 支持私有仓库审计，前提是你本机的SSH Key有权限访问该仓库
 ```
 
-Common flags:
+---
 
-- `--source`
-- `--threshold`
-- `--registry`
-- `--skip-dev`
-- `--retry-count`
-- `--help`
-- `--version`
+## CLI 使用方法
 
-## MCP Usage
+### 常见示例
 
-Run the built entry without CLI flags to start the MCP stdio server:
+输出英文文本报告：
 
 ```bash
-node build/client.js
+npx locklens --source /path/to/project --output-format-language en
 ```
+
+输出 JSON：
+
+```bash
+npx locklens --source /path/to/project --output-format json
+```
+
+指定阈值为高危：
+
+```bash
+npx locklens --source /path/to/project --threshold high
+```
+
+跳过 devDependencies：
+
+```bash
+npx locklens --source /path/to/project --skip-dev
+```
+
+### CLI 参数
+
+| 参数 | 说明 |
+| --- | --- |
+| `--source <value>` | 本地目录路径或远程 Git 仓库地址 |
+| `--threshold <value>` | 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`，默认：`low` |
+| `--registry <url>` | 自定义 npm registry |
+| `--skip-dev` | 跳过 dev dependencies |
+| `--retry-count <number>` | 审计执行重试次数 |
+| `--output-format <value>` | 输出格式，可选：`json`、`text`，默认：`text` |
+| `--output-format-language <value>` | 文本报告语言，可选：`zh`、`en`，默认：`zh` |
+| `--help` / `-h` | 显示帮助 |
+| `--version` / `-v` | 显示版本号 |
+
+---
+
+## MCP 使用方法
+
+`locklens` 支持通过 `stdio` 方式作为 MCP Server 接入，通过将以下配置添加到mcp服务器配置中。
+
+Windows 平台：
+
+```json
+{
+  "mcpServers": {
+    "locklens": {
+      "command": "cmd",
+      "args": ["/c", "npx", "--yes", "locklens"]
+    }
+  }
+}
+```
+
+其他平台：
+
+```json
+{
+  "mcpServers": {
+    "locklens": {
+      "command": "npx",
+      "args": ["--yes", "locklens"]
+    }
+  }
+}
+```
+
+### Tools
+
+### `package_audit`
+
+审计指定项目目录或远程 Git 仓库的 lockfile，并返回统一格式的漏洞结果。
+
+**参数：**
+- `source`
+    - 本地目录绝对路径，或远程 Git 仓库地址；默认使用当前工作目录
+- `threshold`
+    - 漏洞过滤阈值，可选：`low`、`moderate`、`high`、`critical`；默认：`low`
+- `registry`
+    - 自定义 npm registry 地址
+- `skipDev`
+    - 是否跳过 dev dependencies
+- `retryCount`
+    - 审计执行重试次数
+- `outputFormat`
+    - 输出格式，可选：`text`、`json`；默认：`text`
+- `outputFormatLanguage`
+    - 文本报告语言，可选：`zh`、`en`；默认：`zh`
+
+
+---
 
 ## License
 
-MIT
+Copyright (c) 2026 chenglin
+
+locklens is released under the [MIT License](LICENSE)

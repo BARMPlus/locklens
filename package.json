@@ -11,7 +11,7 @@
   "type": "module",
   "scripts": {
     "build": "tsup",
-    "start": "node build/client.js",
+    "start": "yarn build && node build/client.js",
     "test:cli": "yarn build && node --test tests/cli",
     "test:manual:local": "npx tsx src/tests/audit-local-manual-test.ts",
     "test:manual:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
@@ -38,6 +38,7 @@
   "files": [
     "build",
     "README.md",
+    "README-en_US.md",
     "LICENSE"
   ],
   "engines": {

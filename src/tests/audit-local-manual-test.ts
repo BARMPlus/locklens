@@ -16,8 +16,8 @@ async function main() {
     // 默认切到更稳定的本地 npm 项目，避免默认指向网络条件更敏感的 Yarn 项目后影响调试体验。
     // 日常联调时只打开一行，避免误解当前到底在测哪个来源。
     source,
-    threshold: 'moderate',
-    outputFormatLanguage: 'zh',
+    // threshold: 'moderate',
+    // outputFormatLanguage: 'zh',
     // outputFormat: 'json',
   })
   const outputFilePath = await writeManualAuditResult(result, 'audit-manual-result', {

@@ -16,9 +16,9 @@ async function main() {
 
   const result = await runPackageAudit({
     source,
-    threshold: 'moderate',
-    outputFormat: 'json',
-    outputFormatLanguage: 'en',
+    // threshold: 'moderate',
+    // outputFormat: 'json',
+    // outputFormatLanguage: 'en',
   })
   const outputFilePath = await writeManualAuditResult(
     result,

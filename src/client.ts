@@ -33,7 +33,7 @@ function createAuditServer() {
       description: 'Audit a local project or remote Git repository lockfile and return normalized package vulnerability results.',
       inputSchema: {
         source: z.string().optional().describe('Local directory path or remote Git repository URL'),
-        threshold: z.enum(['low', 'moderate', 'high', 'critical']).optional().describe('Minimum threshold that controls the returned advisories list'),
+        threshold: z.enum(['low', 'moderate', 'high', 'critical']).optional().describe('Minimum threshold that controls the returned advisories list. Defaults to low.'),
         registry: z.string().optional().describe('Custom registry URL used during audit execution'),
         skipDev: z.boolean().optional().describe('Whether to skip dev dependencies during audit'),
         retryCount: z.number().int().min(0).optional().describe('Retry count passed to the audit executor'),
