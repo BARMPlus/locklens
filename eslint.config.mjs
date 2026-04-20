@@ -7,7 +7,7 @@ export default tsEslint.config(
     ignores: ["node_modules/**", "build/**"],
   },
   {
-    files: ["**/*.ts"],
+    files: ["**/*.{ts,js,mjs,cjs}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",

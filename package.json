@@ -1,9 +1,12 @@
 {
-  "name": "frontend-audit-mcp",
+  "name": "locklens",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "build/client.js",
   "bin": {
-    "frontend-audit-mcp": "build/client.js"
+    "locklens": "build/client.js"
+  },
+  "exports": {
+    ".": "./build/client.js"
   },
   "type": "module",
   "scripts": {
@@ -18,10 +21,28 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "yarn test:cli"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "lockfile",
+    "audit",
+    "security",
+    "mcp",
+    "cli",
+    "npm",
+    "yarn",
+    "pnpm",
+    "dependencies"
+  ],
+  "author": "chenglin",
+  "license": "MIT",
+  "description": "Audit npm, Yarn, and pnpm lockFiles as both an MCP server and a CLI tool.",
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
     "@modelcontextprotocol/sdk": "^1.29.0",

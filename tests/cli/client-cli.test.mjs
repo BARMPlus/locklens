@@ -121,7 +121,7 @@ test('CLI: 非法 threshold 应返回参数错误退出码', async () => {
 test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
   const result = await runBuiltCli(
     buildClientPath,
-    ['--source', '/tmp/frontend-audit-mcp-not-exists', '--threshold', 'moderate'],
+    ['--source', '/tmp/locklens-not-exists', '--threshold', 'moderate'],
     {
       cwd: projectRoot,
     }
