@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/BARMPlus/locklens/compare/v1.1.4...v1.1.5) (2026-04-21)
+
+
+### Bug Fixes
+
+* npx无法调用修复 ([30c1bd8](https://github.com/BARMPlus/locklens/commit/30c1bd85df048ff497e7eaa188cd93570f781dde))
+
+
+### Chores
+
+* 修改README ([1d9893c](https://github.com/BARMPlus/locklens/commit/1d9893ccbde2c86bed3377d1f187acb985d44440))
+
 ### [1.1.4](https://github.com/BARMPlus/locklens/compare/v1.1.3...v1.1.4) (2026-04-21)
 
 
