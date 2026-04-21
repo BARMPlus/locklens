@@ -12,9 +12,10 @@ It can audit a local project directory or a remote Git repository, and supports 
 
 ## Features
 
-- Supports local project directory auditing
-- Supports remote Git repository auditing
+- Supports auditing local project directories and remote Git repositories
+- Supports auditing both public and private repositories
 - Supports `package-lock.json`, `yarn.lock`, and `pnpm-lock.yaml`
+- Audits only existing lockfiles in the repository, helping keep results aligned with the real dependency state
 - Supports Chinese and English text reports
 - Supports explicit JSON output
 
