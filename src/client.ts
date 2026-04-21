@@ -8,12 +8,7 @@ import { z } from 'zod'
 
 import { AuditError } from './audit'
 import { runPackageAudit } from './audit'
-import {
-  buildCliHelpText,
-  CliArgumentError,
-  hasCliInvocation,
-  parseCliArgs,
-} from './cli/args'
+import { buildCliHelpText, CliArgumentError, hasCliInvocation, parseCliArgs } from './cli/args'
 import { runCliAudit, writeCliError } from './cli/run-cli'
 import {
   buildPackageAuditGuideMarkdown,
@@ -38,7 +33,8 @@ export function createAuditServer() {
     PACKAGE_AUDIT_GUIDE_RESOURCE_URI,
     {
       title: 'Locklens Package Audit Guide',
-      description: 'package_audit 的最小使用指南，包含默认值、输入规则、私有仓库接入方式和常见示例。',
+      description:
+        'package_audit 的最小使用指南，包含默认值、输入规则、私有仓库接入方式和常见示例。',
       mimeType: 'text/markdown',
     },
     async () => {
@@ -51,25 +47,55 @@ export function createAuditServer() {
           },
         ],
       }
-    }
+    },
   )
 
   server.registerTool(
     'package_audit',
     {
-      description: 'Audit a local project or remote Git repository lockfile and return normalized package vulnerability results.',
+      description:
+        'Audit a local project or remote Git repository lockfile and return normalized package vulnerability results.',
       inputSchema: {
         source: z.string().describe('Required. Local directory path or remote Git repository URL'),
-        threshold: z.enum(['low', 'moderate', 'high', 'critical']).optional().describe('Minimum threshold that controls the returned advisories list. Defaults to low.'),
-        registry: z.string().optional().describe('Custom registry URL used during audit execution. Defaults to https://registry.npmjs.org/.'),
+        threshold: z
+          .enum(['low', 'moderate', 'high', 'critical'])
+          .optional()
+          .describe(
+            'Minimum threshold that controls the returned advisories list. Defaults to low.',
+          ),
+        registry: z
+          .string()
+          .optional()
+          .describe(
+            'Custom registry URL used during audit execution. Defaults to https://registry.npmjs.org/.',
+          ),
         skipDev: z.boolean().optional().describe('Whether to skip dev dependencies during audit'),
-        retryCount: z.number().int().min(0).optional().describe('Retry count passed to the audit executor'),
-        outputFormat: z.enum(['json', 'text']).optional().describe('Response format. Defaults to text.'),
+        retryCount: z
+          .number()
+          .int()
+          .min(0)
+          .optional()
+          .describe('Retry count passed to the audit executor'),
+        outputFormat: z
+          .enum(['json', 'text'])
+          .optional()
+          .describe('Response format. Defaults to text.'),
         // 语言参数和输出格式拆开定义，避免把“格式”和“语言”混进一个字段里。
-        outputFormatLanguage: z.enum(['zh', 'en']).optional().describe('Text report language. Defaults to zh.'),
+        outputFormatLanguage: z
+          .enum(['zh', 'en'])
+          .optional()
+          .describe('Text report language. Defaults to zh.'),
       },
     },
-    async ({ source, threshold, registry, skipDev, retryCount, outputFormat, outputFormatLanguage }) => {
+    async ({
+      source,
+      threshold,
+      registry,
+      skipDev,
+      retryCount,
+      outputFormat,
+      outputFormatLanguage,
+    }) => {
       try {
         const result = await runPackageAudit({
           source,
@@ -114,7 +140,7 @@ export function createAuditServer() {
           isError: true,
         }
       }
-    }
+    },
   )
 
   return server

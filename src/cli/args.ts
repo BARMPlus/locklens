@@ -75,7 +75,7 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
 
         if (!VALID_THRESHOLDS.includes(threshold as CliThreshold)) {
           throw new CliArgumentError(
-            `Invalid value for --threshold: ${threshold}. Expected one of ${VALID_THRESHOLDS.join(', ')}.`
+            `Invalid value for --threshold: ${threshold}. Expected one of ${VALID_THRESHOLDS.join(', ')}.`,
           )
         }
 
@@ -96,7 +96,7 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
 
         if (!Number.isInteger(retryCount) || retryCount < 0) {
           throw new CliArgumentError(
-            `Invalid value for --retry-count: ${retryCountText}. Expected a non-negative integer.`
+            `Invalid value for --retry-count: ${retryCountText}. Expected a non-negative integer.`,
           )
         }
 
@@ -109,7 +109,7 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
 
         if (!VALID_OUTPUT_FORMATS.includes(outputFormat as CliOutputFormat)) {
           throw new CliArgumentError(
-            `Invalid value for --output-format: ${outputFormat}. Expected one of ${VALID_OUTPUT_FORMATS.join(', ')}.`
+            `Invalid value for --output-format: ${outputFormat}. Expected one of ${VALID_OUTPUT_FORMATS.join(', ')}.`,
           )
         }
 
@@ -120,9 +120,11 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
       case '--output-format-language': {
         const outputFormatLanguage = readFlagValue(args, index, '--output-format-language')
 
-        if (!VALID_OUTPUT_FORMAT_LANGUAGES.includes(outputFormatLanguage as CliOutputFormatLanguage)) {
+        if (
+          !VALID_OUTPUT_FORMAT_LANGUAGES.includes(outputFormatLanguage as CliOutputFormatLanguage)
+        ) {
           throw new CliArgumentError(
-            `Invalid value for --output-format-language: ${outputFormatLanguage}. Expected one of ${VALID_OUTPUT_FORMAT_LANGUAGES.join(', ')}.`
+            `Invalid value for --output-format-language: ${outputFormatLanguage}. Expected one of ${VALID_OUTPUT_FORMAT_LANGUAGES.join(', ')}.`,
           )
         }
 
@@ -131,7 +133,9 @@ export function parseCliArgs(args: string[]): ParsedCliArgs {
         break
       }
       default:
-        throw new CliArgumentError(`Unknown argument: ${argument}. Use --help to view supported flags.`)
+        throw new CliArgumentError(
+          `Unknown argument: ${argument}. Use --help to view supported flags.`,
+        )
     }
   }
 

@@ -1,13 +1,13 @@
-import type { SupportedSeverity } from "../types";
+import type { SupportedSeverity } from '../types'
 
 // 英文模板配置与中文模板拆开，便于后续单独调整英文术语和报告风格。
 export const SEVERITY_LABELS_EN: Record<SupportedSeverity, string> = {
-  critical: "Critical",
-  high: "High",
-  moderate: "Moderate",
-  low: "Low",
-  info: "Info",
-};
+  critical: 'Critical',
+  high: 'High',
+  moderate: 'Moderate',
+  low: 'Low',
+  info: 'Info',
+}
 
 // 英文报告与中文报告共享同一份数据语义，只在文案和语言风格上做切换。
 export const textReportTemplateEn = String.raw`# \`<%= targetName %>\` Audit Report
@@ -63,4 +63,4 @@ Count: **<%= group.items.length %>**
 
 <%_ } _%>
 <%_ } _%>
-`;
+`

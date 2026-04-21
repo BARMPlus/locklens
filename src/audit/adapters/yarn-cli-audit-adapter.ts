@@ -8,10 +8,7 @@ import { finished } from 'node:stream/promises'
 
 import { gitHubAdvisoryUrlToAdvisoryId, type Summary as AuditCiSummary } from 'audit-ci'
 
-import {
-  DEFAULT_AUDIT_REGISTRY,
-  LOCKLENS_TEMP_ARTIFACT_PREFIX,
-} from '../constants'
+import { DEFAULT_AUDIT_REGISTRY, LOCKLENS_TEMP_ARTIFACT_PREFIX } from '../constants'
 import { AuditExecutionError } from '../errors'
 import type {
   AuditCiAdapterInput,
@@ -21,8 +18,8 @@ import type {
 } from '../types'
 
 interface YarnAuditPayload {
-  advisories: Record<string, unknown>;
-  metadata: Record<string, unknown> | null;
+  advisories: Record<string, unknown>
+  metadata: Record<string, unknown> | null
 }
 
 const YARN_AUDIT_TIMEOUT_MS = 60_000
@@ -143,9 +140,7 @@ function collectJsonObjects(stdout: string) {
   return collectJsonObjectsFromBlocks(stdout)
 }
 
-function normalizeClassicEventPayload(
-  jsonObjects: unknown[]
-): YarnAuditPayload | null {
+function normalizeClassicEventPayload(jsonObjects: unknown[]): YarnAuditPayload | null {
   const advisories: Record<string, unknown> = {}
   let metadata: Record<string, unknown> | null = null
 
@@ -249,16 +244,10 @@ function buildYarnAuditPayload(stdout: string) {
   const normalizedStdout = stripAnsi(stdout)
   const jsonObjects = collectJsonObjects(normalizedStdout)
 
-  return (
-    normalizeImportantPayload(jsonObjects) ??
-    normalizeClassicEventPayload(jsonObjects)
-  )
+  return normalizeImportantPayload(jsonObjects) ?? normalizeClassicEventPayload(jsonObjects)
 }
 
-function readAdvisoryId(
-  advisoryKey: string,
-  advisory: Record<string, unknown>
-) {
+function readAdvisoryId(advisoryKey: string, advisory: Record<string, unknown>) {
   const githubAdvisoryId = readString(advisory, 'github_advisory_id')
 
   if (githubAdvisoryId) {
@@ -302,10 +291,7 @@ function readAdvisoryPaths(advisory: Record<string, unknown>) {
   return [...paths].sort()
 }
 
-function severityMeetsThreshold(
-  severity: SupportedSeverity | null,
-  threshold: AuditThreshold
-) {
+function severityMeetsThreshold(severity: SupportedSeverity | null, threshold: AuditThreshold) {
   const severityRank: Record<AuditThreshold | 'info', number> = {
     info: 0,
     low: 1,
@@ -321,10 +307,7 @@ function severityMeetsThreshold(
   return severityRank[severity] >= severityRank[threshold]
 }
 
-function buildYarnSummary(
-  payload: YarnAuditPayload,
-  threshold: AuditThreshold
-): AuditCiSummary {
+function buildYarnSummary(payload: YarnAuditPayload, threshold: AuditThreshold): AuditCiSummary {
   const advisoryIds = new Set<string>()
   const advisoryPaths = new Set<string>()
   const failedLevels = new Set<AuditThreshold>()
@@ -344,11 +327,7 @@ function buildYarnSummary(
       advisoryPaths.add(`${advisoryId}|${advisoryPath}`)
     }
 
-    if (
-      severity &&
-      severity !== 'info' &&
-      severityMeetsThreshold(severity, threshold)
-    ) {
+    if (severity && severity !== 'info' && severityMeetsThreshold(severity, threshold)) {
       failedLevels.add(severity as AuditThreshold)
     }
   }
@@ -384,9 +363,7 @@ function buildAuditCiArgs(input: AuditCiAdapterInput) {
     '--registry',
     effectiveRegistry,
     ...(input.skipDev ? ['--skip-dev'] : []),
-    ...(typeof input.retryCount === 'number'
-      ? ['--retry-count', String(input.retryCount)]
-      : []),
+    ...(typeof input.retryCount === 'number' ? ['--retry-count', String(input.retryCount)] : []),
     ...(input.passEnoAudit ? ['--pass-enoaudit'] : []),
     ...(input.extraArgs ?? []).flatMap((extraArg) => ['--extra-args', extraArg]),
   ]
@@ -443,7 +420,7 @@ function createTempAuditFilePath(extension: string) {
   const randomSuffix = Math.random().toString(36).slice(2, 10)
   return path.join(
     os.tmpdir(),
-    `${LOCKLENS_TEMP_ARTIFACT_PREFIX}yarn-${Date.now()}-${process.pid}-${randomSuffix}.${extension}`
+    `${LOCKLENS_TEMP_ARTIFACT_PREFIX}yarn-${Date.now()}-${process.pid}-${randomSuffix}.${extension}`,
   )
 }
 
@@ -492,7 +469,7 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
       const timeoutError = new AuditExecutionError(
         stderr.length > 0
           ? `Yarn audit timed out after ${YARN_AUDIT_TIMEOUT_MS / 1000}s while auditing ${input.detection.lockfileName}. stderr: ${stderr}`
-          : `Yarn audit timed out after ${YARN_AUDIT_TIMEOUT_MS / 1000}s while auditing ${input.detection.lockfileName}. 可能原因是 Yarn 在外网环境下重试私有包源或私有依赖审计请求。`
+          : `Yarn audit timed out after ${YARN_AUDIT_TIMEOUT_MS / 1000}s while auditing ${input.detection.lockfileName}. 可能原因是 Yarn 在外网环境下重试私有包源或私有依赖审计请求。`,
       )
 
       if (process.platform !== 'win32' && typeof auditProcess.pid === 'number') {
@@ -501,8 +478,7 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
         } catch {
           // 进程组可能已经结束，这里忽略即可。
         }
-      }
-      else {
+      } else {
         auditProcess.kill('SIGTERM')
       }
 
@@ -514,8 +490,7 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
             } catch {
               // 兜底清理失败时不覆盖主错误。
             }
-          }
-          else {
+          } else {
             auditProcess.kill('SIGKILL')
           }
         }
@@ -560,18 +535,15 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
   }
 
   const stderr = stderrMessages.join('\n').trim()
-  const errorMessage =
-    stderr.length > 0
-      ? stderr
-      : 'audit-ci returned no parsable Yarn JSON output'
+  const errorMessage = stderr.length > 0 ? stderr : 'audit-ci returned no parsable Yarn JSON output'
 
   throw new AuditExecutionError(
-    `Yarn audit failed for ${input.detection.lockfileName} (exit code: ${exitCode}): ${errorMessage}`
+    `Yarn audit failed for ${input.detection.lockfileName} (exit code: ${exitCode}): ${errorMessage}`,
   )
 }
 
 export async function runYarnCliAuditAdapter(
-  input: AuditCiAdapterInput
+  input: AuditCiAdapterInput,
 ): Promise<AuditCiAdapterResult> {
   try {
     const stdout = await runAuditCiCommand(input)
@@ -593,12 +565,11 @@ export async function runYarnCliAuditAdapter(
       throw error
     }
 
-    const message =
-      error instanceof Error ? error.message : 'Yarn audit execution failed'
+    const message = error instanceof Error ? error.message : 'Yarn audit execution failed'
 
     throw new AuditExecutionError(
       `Yarn audit failed for ${input.detection.lockfileName}: ${message}`,
-      error
+      error,
     )
   }
 }

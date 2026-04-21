@@ -1,7 +1,5 @@
 import { runPackageAudit } from '../audit'
-import {
-  writeManualAuditResult,
-} from './utils/manual-test-utils'
+import { writeManualAuditResult } from './utils/manual-test-utils'
 
 async function main() {
   // 这个文件是“远程仓库手动联调入口”，不是自动化单测。
@@ -18,20 +16,15 @@ async function main() {
   // const source = 'https://git.dian.so/devops/dna-frontend.git' // 内网仓库（HTTPS 方式）
   // const source = 'git@git.dian.so:devops/dna-frontend.git' // 内网仓库（SSH 方式）
 
-
   const result = await runPackageAudit({
     source,
     // threshold: 'moderate',
     // outputFormat: 'json',
     // outputFormatLanguage: 'en',
   })
-  const outputFilePath = await writeManualAuditResult(
-    result,
-    'audit-remote-manual-result',
-    {
-      outputDirectory: process.cwd(),
-    }
-  )
+  const outputFilePath = await writeManualAuditResult(result, 'audit-remote-manual-result', {
+    outputDirectory: process.cwd(),
+  })
 
   console.log('[audit-remote-manual-test] 结果写入成功')
   console.log(`[audit-remote-manual-test] 输出文件: ${outputFilePath}`)

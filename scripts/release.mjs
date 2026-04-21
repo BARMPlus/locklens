@@ -29,8 +29,8 @@ function runCommand(command, args) {
         new Error(
           signal
             ? `${command} ${args.join(' ')} exited with signal ${signal}.`
-            : `${command} ${args.join(' ')} exited with code ${code}.`
-        )
+            : `${command} ${args.join(' ')} exited with code ${code}.`,
+        ),
       )
     })
   })

@@ -13,14 +13,12 @@ export function createTimestamp() {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hourCycle: 'h23'
+    hourCycle: 'h23',
   })
 
   const parts = formatter.formatToParts(new Date())
   const timeParts = Object.fromEntries(
-    parts
-      .filter((part) => part.type !== 'literal')
-      .map((part) => [part.type, part.value])
+    parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]),
   )
 
   return `${timeParts.year}-${timeParts.month}-${timeParts.day}T${timeParts.hour}-${timeParts.minute}-${timeParts.second}`
@@ -32,7 +30,7 @@ export async function writeManualAuditResult(
   options: {
     outputDirectory: string
     extension?: 'json' | 'md'
-  }
+  },
 ) {
   const { outputDirectory } = options
   const extension = options.extension ?? (typeof result === 'string' ? 'md' : 'json')

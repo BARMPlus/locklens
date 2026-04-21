@@ -1,13 +1,13 @@
-import type { SupportedSeverity } from "../types";
+import type { SupportedSeverity } from '../types'
 
 // 中文模板配置单独拆分，方便后续独立维护中文术语和排版。
 export const SEVERITY_LABELS_ZH: Record<SupportedSeverity, string> = {
-  critical: "严重",
-  high: "高危",
-  moderate: "中危",
-  low: "低危",
-  info: "提示",
-};
+  critical: '严重',
+  high: '高危',
+  moderate: '中危',
+  low: '低危',
+  info: '提示',
+}
 
 // 中文报告模板只使用通用 Markdown 语法，尽量保证绝大多数解析器都能稳定渲染。
 export const textReportTemplateZh = String.raw`# \`<%= targetName %>\` 审计结果
@@ -63,4 +63,4 @@ export const textReportTemplateZh = String.raw`# \`<%= targetName %>\` 审计结
 
 <%_ } _%>
 <%_ } _%>
-`;
+`

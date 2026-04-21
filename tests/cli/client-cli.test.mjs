@@ -51,7 +51,7 @@ async function resolveAuditSourceForTest(source) {
     ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -80,7 +80,7 @@ async function resolveAuditSourceWithProbeForTest(source, shouldUseSsh) {
     ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source, String(shouldUseSsh)],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -119,7 +119,7 @@ async function resolveSshTransportProbeStatusForTest({
     ],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(evalStdout).result
@@ -140,7 +140,7 @@ async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
     ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, repositoryUrl],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -149,7 +149,7 @@ async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
 async function resolveRemoteWorkspaceProviderPlanForTest(
   source,
   envOverrides = {},
-  shouldUseSshForPublicHosts = false
+  shouldUseSshForPublicHosts = false,
 ) {
   // provider 计划是远程编排层的纯决策结果。
   // 这里直接拿正式实现来校验“命中了哪个 provider，以及前置 TCP 校验该探测哪个目标”。
@@ -176,14 +176,20 @@ async function resolveRemoteWorkspaceProviderPlanForTest(
 
   const { stdout } = await execFileAsync(
     process.execPath,
-    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source, String(shouldUseSshForPublicHosts)],
+    [
+      './node_modules/tsx/dist/cli.mjs',
+      '--eval',
+      evalScript,
+      source,
+      String(shouldUseSshForPublicHosts),
+    ],
     {
       cwd: projectRoot,
       env: {
         ...process.env,
         ...envOverrides,
       },
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -243,7 +249,7 @@ async function readMcpPackageAuditGuideForTest() {
     ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -256,7 +262,7 @@ async function createRemoteConnectivityErrorForTest(
   port,
   timeoutMs,
   errorCode,
-  errorMessage = ''
+  errorMessage = '',
 ) {
   // 这里构造一个最小错误对象，专门校验远程连通性错误文案的稳定性。
   const evalScript = `
@@ -296,7 +302,7 @@ async function createRemoteConnectivityErrorForTest(
     ],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   return JSON.parse(stdout)
@@ -316,7 +322,7 @@ async function runRemoteCliWithRetry(source, threshold = 'moderate') {
       {
         cwd: projectRoot,
         timeout: 120_000,
-      }
+      },
     )
 
     if (result.exitCode === 0) {
@@ -352,13 +358,13 @@ function assertNormalizedAuditMetrics(payload) {
   assert.equal(
     vulnerabilities.total,
     severityTotal,
-    'metadata.vulnerabilities.total 应等于各级别漏洞数量之和'
+    'metadata.vulnerabilities.total 应等于各级别漏洞数量之和',
   )
 
   assert.equal(
     vulnerabilities.filteredTotal,
     payload.advisories.length,
-    'metadata.vulnerabilities.filteredTotal 应与 advisories 长度一致'
+    'metadata.vulnerabilities.filteredTotal 应与 advisories 长度一致',
   )
 }
 
@@ -412,13 +418,10 @@ function assertTextReportMatchesPayload(reportText, payload) {
   const { vulnerabilities } = payload.metadata
 
   assert.match(reportText, new RegExp(`审计来源：${escapeRegExp(payload.runtime.source)}`))
+  assert.match(reportText, new RegExp(`- lockFile：${escapeRegExp(payload.runtime.lockfileName)}`))
   assert.match(
     reportText,
-    new RegExp(`- lockFile：${escapeRegExp(payload.runtime.lockfileName)}`)
-  )
-  assert.match(
-    reportText,
-    new RegExp(`- \\*\\*风险漏洞总数\\*\\*：\\*\\*${vulnerabilities.total ?? 0}\\*\\*`)
+    new RegExp(`- \\*\\*风险漏洞总数\\*\\*：\\*\\*${vulnerabilities.total ?? 0}\\*\\*`),
   )
 
   const severityAssertions = [
@@ -429,10 +432,7 @@ function assertTextReportMatchesPayload(reportText, payload) {
   ]
 
   for (const [label, count] of severityAssertions) {
-    assert.match(
-      reportText,
-      new RegExp(`- \\*\\*${label}漏洞\\*\\*：共计 \\*\\*${count}\\*\\* 个`)
-    )
+    assert.match(reportText, new RegExp(`- \\*\\*${label}漏洞\\*\\*：共计 \\*\\*${count}\\*\\* 个`))
   }
 
   assert.doesNotMatch(reportText, /提示漏洞/)
@@ -440,8 +440,8 @@ function assertTextReportMatchesPayload(reportText, payload) {
   assert.match(
     reportText,
     new RegExp(
-      `当前展示的漏洞最低级别为${escapeRegExp(buildMinimumDisplayedSeverityLabel(payload))}，下面将展示${escapeRegExp(buildDisplayedSeverityLabels(payload))}的错误信息，这些错误总数一共为${payload.metadata.vulnerabilities.filteredTotal ?? 0}个`
-    )
+      `当前展示的漏洞最低级别为${escapeRegExp(buildMinimumDisplayedSeverityLabel(payload))}，下面将展示${escapeRegExp(buildDisplayedSeverityLabels(payload))}的错误信息，这些错误总数一共为${payload.metadata.vulnerabilities.filteredTotal ?? 0}个`,
+    ),
   )
 
   assert.doesNotMatch(reportText, /\*\*依赖关系\*\*：\n\s*\n/)
@@ -452,13 +452,10 @@ function assertEnglishTextReportMatchesPayload(reportText, payload) {
 
   assert.match(reportText, /## Audit Overview/)
   assert.match(reportText, new RegExp(`- Audit Source: ${escapeRegExp(payload.runtime.source)}`))
+  assert.match(reportText, new RegExp(`- lockFile: ${escapeRegExp(payload.runtime.lockfileName)}`))
   assert.match(
     reportText,
-    new RegExp(`- lockFile: ${escapeRegExp(payload.runtime.lockfileName)}`)
-  )
-  assert.match(
-    reportText,
-    new RegExp(`- \\*\\*Total Vulnerabilities\\*\\*: \\*\\*${vulnerabilities.total ?? 0}\\*\\*`)
+    new RegExp(`- \\*\\*Total Vulnerabilities\\*\\*: \\*\\*${vulnerabilities.total ?? 0}\\*\\*`),
   )
 
   const severityAssertions = [
@@ -469,17 +466,14 @@ function assertEnglishTextReportMatchesPayload(reportText, payload) {
   ]
 
   for (const [label, count] of severityAssertions) {
-    assert.match(
-      reportText,
-      new RegExp(`- \\*\\*${label}\\*\\*: \\*\\*${count}\\*\\*`)
-    )
+    assert.match(reportText, new RegExp(`- \\*\\*${label}\\*\\*: \\*\\*${count}\\*\\*`))
   }
 
   assert.match(
     reportText,
     new RegExp(
-      `The minimum displayed vulnerability level is ${escapeRegExp(buildMinimumDisplayedSeverityLabelEn(payload))}\\. The following report shows ${escapeRegExp(buildDisplayedSeverityLabelsEn(payload))} issues, with \\*\\*${payload.metadata.vulnerabilities.filteredTotal ?? 0}\\*\\* issues in total\\.`
-    )
+      `The minimum displayed vulnerability level is ${escapeRegExp(buildMinimumDisplayedSeverityLabelEn(payload))}\\. The following report shows ${escapeRegExp(buildDisplayedSeverityLabelsEn(payload))} issues, with \\*\\*${payload.metadata.vulnerabilities.filteredTotal ?? 0}\\*\\* issues in total\\.`,
+    ),
   )
 }
 
@@ -561,7 +555,7 @@ test('Source Resolver: gitee HTTPS 地址在 ssh -T 成功时应转换为 SSH', 
   assert.equal(resolvedSource.inputSource, source)
   assert.equal(
     resolvedSource.repositoryUrl,
-    'git@gitee.com:BluesYoung-web/admin-vue3-element3-vite2.git'
+    'git@gitee.com:BluesYoung-web/admin-vue3-element3-vite2.git',
   )
 })
 
@@ -580,15 +574,12 @@ test('Source Resolver: 非白名单 HTTP(S) 地址应转换为 SSH', async () =>
 
   assert.equal(resolvedSource.kind, 'remote')
   assert.equal(resolvedSource.inputSource, source)
-  assert.equal(
-    resolvedSource.repositoryUrl,
-    'git@git.dian.so:devops/dna-frontend.git'
-  )
+  assert.equal(resolvedSource.repositoryUrl, 'git@git.dian.so:devops/dna-frontend.git')
 })
 
 test('Remote Connectivity: HTTPS 地址应解析为 443 端口', async () => {
   const target = await resolveRemoteConnectivityTargetForTest(
-    'https://github.com/BARMPlus/micro-app'
+    'https://github.com/BARMPlus/micro-app',
   )
 
   assert.equal(target.protocol, 'https')
@@ -598,7 +589,7 @@ test('Remote Connectivity: HTTPS 地址应解析为 443 端口', async () => {
 
 test('Remote Connectivity: SSH URL 应保留显式端口', async () => {
   const target = await resolveRemoteConnectivityTargetForTest(
-    'ssh://git@gitlab.com:2222/group/repo.git'
+    'ssh://git@gitlab.com:2222/group/repo.git',
   )
 
   assert.equal(target.protocol, 'ssh')
@@ -607,9 +598,7 @@ test('Remote Connectivity: SSH URL 应保留显式端口', async () => {
 })
 
 test('Remote Connectivity: SCP 风格地址应解析为 22 端口', async () => {
-  const target = await resolveRemoteConnectivityTargetForTest(
-    'git@gitee.com:group/repo.git'
-  )
+  const target = await resolveRemoteConnectivityTargetForTest('git@gitee.com:group/repo.git')
 
   assert.equal(target.protocol, 'ssh')
   assert.equal(target.hostname, 'gitee.com')
@@ -633,7 +622,7 @@ test('Remote Connectivity: 超时错误文案应包含 5s', async () => {
     'git.dian.so',
     22,
     5_000,
-    'ETIMEDOUT'
+    'ETIMEDOUT',
   )
 
   assert.equal(error.code, 'REMOTE_CONNECTIVITY_FAILED')
@@ -643,7 +632,8 @@ test('Remote Connectivity: 超时错误文案应包含 5s', async () => {
 
 test('SSH Probe: 认证成功但无 shell 的输出应判定为成功', async () => {
   const result = await resolveSshTransportProbeStatusForTest({
-    stderr: "Hi octocat! You've successfully authenticated, but GitHub does not provide shell access.",
+    stderr:
+      "Hi octocat! You've successfully authenticated, but GitHub does not provide shell access.",
   })
 
   assert.equal(result, 'success')
@@ -678,7 +668,7 @@ test('Remote Provider: gitlab.com + GitLab token 应命中 GitLab provider', asy
     'https://gitlab.com/group/repo.git',
     {
       LOCKLENS_GITLAB_TOKEN: 'gitlab-token',
-    }
+    },
   )
 
   assert.equal(plan.name, 'gitlab')
@@ -702,7 +692,7 @@ test('Remote Provider: 私有域名 + private token 应命中 self-managed provi
     'https://git.dian.so/devops/dna-frontend.git',
     {
       LOCKLENS_GITLAB_PRIVATE_TOKEN: 'private-token',
-    }
+    },
   )
 
   assert.equal(plan.name, 'gitlab-self-managed')
@@ -715,14 +705,11 @@ test('Remote Provider: 私有域名 + 仅 GitLab token 应回退 clone provider'
     'https://git.dian.so/devops/dna-frontend.git',
     {
       LOCKLENS_GITLAB_TOKEN: 'gitlab-token',
-    }
+    },
   )
 
   assert.equal(plan.name, 'git-clone')
-  assert.equal(
-    plan.connectivityRepositoryUrl,
-    'git@git.dian.so:devops/dna-frontend.git'
-  )
+  assert.equal(plan.connectivityRepositoryUrl, 'git@git.dian.so:devops/dna-frontend.git')
   assert.equal(plan.tokenEnvName, null)
 })
 
@@ -744,7 +731,7 @@ test('CLI: 不存在的 source 应返回简洁错误信息', async () => {
     ['--source', '/tmp/locklens-not-exists', '--threshold', 'moderate'],
     {
       cwd: projectRoot,
-    }
+    },
   )
 
   assert.equal(result.exitCode, 1)
@@ -758,7 +745,7 @@ test('CLI: 远程连通性预检查失败时应直接报错', async () => {
     {
       cwd: projectRoot,
       timeout: 10_000,
-    }
+    },
   )
 
   assert.equal(result.exitCode, 1)
@@ -775,7 +762,7 @@ test('CLI: 默认 output format 应返回中文文本报告', { timeout: 120_000
     {
       cwd: projectRoot,
       timeout: 120_000,
-    }
+    },
   )
   const textResult = await runBuiltCli(
     buildClientPath,
@@ -783,7 +770,7 @@ test('CLI: 默认 output format 应返回中文文本报告', { timeout: 120_000
     {
       cwd: projectRoot,
       timeout: 120_000,
-    }
+    },
   )
 
   const payload = parseCliJsonResult(jsonResult)
@@ -800,7 +787,7 @@ test('CLI: 英文文本模板应返回英文报告', { timeout: 120_000 }, async
     {
       cwd: projectRoot,
       timeout: 120_000,
-    }
+    },
   )
   const textResult = await runBuiltCli(
     buildClientPath,
@@ -808,7 +795,7 @@ test('CLI: 英文文本模板应返回英文报告', { timeout: 120_000 }, async
     {
       cwd: projectRoot,
       timeout: 120_000,
-    }
+    },
   )
 
   const payload = parseCliJsonResult(jsonResult)

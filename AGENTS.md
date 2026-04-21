@@ -22,7 +22,7 @@
 - Node.js ESM
 - `tsup` 构建
 - `tsx` 运行手动联调脚本
-- `eslint` + `lint-staged` + `husky`
+- `prettier` + `eslint` + `lint-staged` + `husky`
 - `commitlint`
 - `@modelcontextprotocol/sdk`
 - `audit-ci`
@@ -136,6 +136,7 @@ Yarn 与 npm / pnpm 的处理是分开的，不要随意合并：
 
 ```bash
 yarn build
+yarn format:check
 yarn typecheck
 yarn lint
 yarn release
@@ -252,3 +253,6 @@ npm publish --dry-run
    - `docs: 更新 MCP 使用说明`
    - `chore(release): 1.1.4`
 7. commit message 校验通过 Husky `commit-msg` hook 执行，不要把这类校验混进 `pre-commit`
+8. 当前仓库统一使用 `Prettier + ESLint` 维护代码风格，默认采用单引号、无分号和尾随逗号风格
+9. 提交前会通过 Husky `pre-commit` + `lint-staged` 先执行 `prettier --write`，再执行 `eslint --fix`
+10. 提交前自动校准范围覆盖 `src/`、`tests/`、`scripts/`；新增代码文件时应继续遵守这一范围

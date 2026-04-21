@@ -12,13 +12,15 @@
   "scripts": {
     "build": "tsup",
     "commitlint": "commitlint",
+    "format": "prettier --write \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
+    "format:check": "prettier --check \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
     "start": "yarn build && node build/client.js",
     "release": "node scripts/release.mjs",
     "test:cli": "yarn build && node --test tests/cli",
     "test:manual:local": "npx tsx src/tests/audit-local-manual-test.ts",
     "test:manual:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "lint": "eslint \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
+    "lint:fix": "eslint \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\" --fix",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "yarn test:cli"
@@ -69,9 +71,11 @@
     "@types/ejs": "^3.1.5",
     "@types/node": "^25.6.0",
     "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
     "standard-version": "^9.5.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
@@ -79,6 +83,9 @@
     "typescript-eslint": "^8.58.2"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx,js,mjs,cjs}": "eslint --fix"
+    "{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
