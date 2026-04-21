@@ -1,9 +1,10 @@
 # locklens
 
-`locklens` is a lockfile auditing tool based on `audit-ci`, with two runtime modes:
+`locklens` is a lockfile auditing tool based on `audit-ci`, with three runtime modes:
 
 - CLI / `npx`
 - MCP Server (`stdio`)
+- Skill
 
 It can audit a local project directory or a remote Git repository, and supports lockfiles from `npm`, `yarn`, and `pnpm`.
 

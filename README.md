@@ -1,9 +1,10 @@
 # locklens
 
-`locklens` 是一个基于 `audit-ci` 的 lockfile 审计工具，支持两种运行模式：
+`locklens` 是一个基于 `audit-ci` 的 lockfile 审计工具，支持三种运行模式：
 
 - CLI / `npx`
 - MCP Server（`stdio`）
+- Skill
 
 它可以审计本地项目目录或远程 Git 仓库，并支持 `npm`、`yarn`、`pnpm` 的 lockfile。
 
