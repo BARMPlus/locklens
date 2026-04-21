@@ -114,6 +114,66 @@ async function resolveRemoteWorkspaceProviderPlanForTest(source, envOverrides = 
   return JSON.parse(stdout)
 }
 
+async function readMcpPackageAuditGuideForTest() {
+  // 这里直接通过 SDK 的 InMemoryTransport 连接正式 MCP server，
+  // 校验 resource 的注册和读取行为，避免测试手写一套协议细节。
+  const evalScript = `
+    import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+    import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
+    import { createAuditServer } from './src/client.ts'
+    import { PACKAGE_AUDIT_GUIDE_RESOURCE_URI } from './src/mcp/resources/package-audit-guide.ts'
+
+    async function main() {
+      const server = createAuditServer()
+      const client = new Client({
+        name: 'locklens-test-client',
+        version: '1.0.0',
+      })
+      const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair()
+
+      await Promise.all([
+        server.connect(serverTransport),
+        client.connect(clientTransport),
+      ])
+
+      const listedResources = await client.listResources()
+      const guide = listedResources.resources.find((resource) => resource.uri === PACKAGE_AUDIT_GUIDE_RESOURCE_URI)
+
+      if (!guide) {
+        throw new Error('package audit guide resource was not found')
+      }
+
+      const readResult = await client.readResource({
+        uri: PACKAGE_AUDIT_GUIDE_RESOURCE_URI,
+      })
+
+      await Promise.all([
+        client.close(),
+        server.close(),
+      ])
+
+      console.log(JSON.stringify({
+        guide,
+        contents: readResult.contents,
+      }))
+    }
+
+    main().catch((error) => {
+      throw error
+    })
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(stdout)
+}
+
 async function createRemoteConnectivityErrorForTest(
   source,
   repositoryUrl,
@@ -666,4 +726,21 @@ test('MCP: 不带参数启动时应进入 stdio 模式且短时间内不向 stdo
       }
     }, 500)
   })
+})
+
+test('MCP: 应注册并返回 package_audit 使用指南 resource', async () => {
+  const result = await readMcpPackageAuditGuideForTest()
+  const [content] = result.contents
+
+  assert.equal(result.guide.name, 'package-audit-guide')
+  assert.equal(result.guide.uri, 'locklens://guides/package-audit')
+  assert.equal(result.guide.mimeType, 'text/markdown')
+  assert.equal(content.uri, 'locklens://guides/package-audit')
+  assert.equal(content.mimeType, 'text/markdown')
+  assert.match(content.text, /source.*必填参数/)
+  assert.match(content.text, /threshold.*low/)
+  assert.match(content.text, /outputFormat.*text/)
+  assert.match(content.text, /outputFormatLanguage.*zh/)
+  assert.match(content.text, /registry.*https:\/\/registry\.npmjs\.org\//)
+  assert.match(content.text, /LOCKLENS_GITLAB_PRIVATE_TOKEN/)
 })

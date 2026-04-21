@@ -1,0 +1,4 @@
+interface:
+  display_name: "依赖审计"
+  short_description: "使用 locklens 审计 npm、yarn、pnpm 依赖并解读漏洞结果"
+  default_prompt: "Use $dependency-audit to audit local directories or remote Git repositories with npx -y locklens, then summarize dependency risk, severity distribution, and key advisories in clear language."

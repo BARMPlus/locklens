@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -14,6 +15,11 @@ import {
   parseCliArgs,
 } from './cli/args'
 import { runCliAudit, writeCliError } from './cli/run-cli'
+import {
+  buildPackageAuditGuideMarkdown,
+  PACKAGE_AUDIT_GUIDE_RESOURCE_NAME,
+  PACKAGE_AUDIT_GUIDE_RESOURCE_URI,
+} from './mcp/resources/package-audit-guide'
 
 const require = createRequire(import.meta.url)
 const packageJson = require('../package.json') as {
@@ -21,11 +27,32 @@ const packageJson = require('../package.json') as {
   version: string
 }
 
-function createAuditServer() {
+export function createAuditServer() {
   const server = new McpServer({
     name: packageJson.name,
     version: packageJson.version,
   })
+
+  server.registerResource(
+    PACKAGE_AUDIT_GUIDE_RESOURCE_NAME,
+    PACKAGE_AUDIT_GUIDE_RESOURCE_URI,
+    {
+      title: 'Locklens Package Audit Guide',
+      description: 'package_audit 的最小使用指南，包含默认值、输入规则、私有仓库接入方式和常见示例。',
+      mimeType: 'text/markdown',
+    },
+    async () => {
+      return {
+        contents: [
+          {
+            uri: PACKAGE_AUDIT_GUIDE_RESOURCE_URI,
+            mimeType: 'text/markdown',
+            text: buildPackageAuditGuideMarkdown(),
+          },
+        ],
+      }
+    }
+  )
 
   server.registerTool(
     'package_audit',
@@ -134,14 +161,22 @@ async function main() {
   await runMcpServer()
 }
 
-main().catch((error) => {
-  if (error instanceof AuditError) {
-    process.stderr.write(`${error.message}\n`)
-    process.exitCode = 1
-    return
-  }
+// 这里等价于 CommonJS 里的“是否为主入口模块”判断。
+// 只有在 `node build/client.js` 或命令行直接执行当前文件时才运行 main()；
+// 如果只是被测试代码或其他模块 import，则不自动启动 CLI / MCP server，
+// 这样测试就可以安全地复用 createAuditServer() 等导出能力。
+const entryFilePath = process.argv[1] ? fileURLToPath(import.meta.url) === process.argv[1] : false
 
-  const message = error instanceof Error ? error.message : String(error)
-  process.stderr.write(`${message}\n`)
-  process.exitCode = 1
-})
+if (entryFilePath) {
+  main().catch((error) => {
+    if (error instanceof AuditError) {
+      process.stderr.write(`${error.message}\n`)
+      process.exitCode = 1
+      return
+    }
+
+    const message = error instanceof Error ? error.message : String(error)
+    process.stderr.write(`${message}\n`)
+    process.exitCode = 1
+  })
+}

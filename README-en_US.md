@@ -145,6 +145,28 @@ Audits the lockfile of a target local project directory or remote Git repository
 - `outputFormatLanguage`
     - Text report language. Options: `zh`, `en`; default: `zh`
 
+---
+
+## Skill
+
+If your client supports Skills, you can use `dependency-audit` directly without setting up MCP.
+
+The Skill directory in this repository is located at:
+
+```text
+dependency-audit/
+```
+
+By default, the skill uses `--skip-dev` to focus on production-facing risk. If you want both development and production dependency risk, state that clearly so the run can proceed without `--skip-dev`.
+
+Examples:
+
+```text
+1. Use dependency-audit to audit dependency issues in the current project
+2. Audit dependency issues in https://github.com/BARMPlus/micro-app and tell me all development and production dependency risks
+3. Output the critical dependency issues in https://github.com/BARMPlus/micro-app
+```
+
 
 ---
 

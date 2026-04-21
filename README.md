@@ -145,6 +145,28 @@ Windows 平台：
 - `outputFormatLanguage`
     - 文本报告语言，可选：`zh`、`en`；默认：`zh`
 
+---
+
+## Skill
+
+如果你的客户端支持 Skill，也可以直接使用 `dependency-audit`，不需要先接入 MCP。
+
+当前仓库内的 Skill 目录位于：
+
+```text
+dependency-audit/
+```
+
+默认会带上 `--skip-dev`，优先只带出线上风险；如果你希望带出开发和线上所有依赖风险，可以明确说明取消 `--skip-dev`。
+
+示例：
+
+```
+1. 使用 dependency-audit 审计当前项目的依赖问题
+2. https://github.com/BARMPlus/micro-app 审计这个项目的依赖，告知我开发和线上所有的依赖问题
+3. 输出 https://github.com/BARMPlus/micro-app 这个项目严重的依赖问题
+```
+
 
 ---
 
