@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/BARMPlus/locklens/compare/v1.1.3...v1.1.4) (2026-04-21)
+
+
+### Features
+
+* commitlint ([ac3a04b](https://github.com/BARMPlus/locklens/commit/ac3a04b0ad9bca5589e3316ea9538eb25898e3c6))
+* style ([4fff78c](https://github.com/BARMPlus/locklens/commit/4fff78c5e1ba99ff0efd4fdeb0b75be02573a64c))
+
 ### 1.1.3 (2026-04-21)
 
 
