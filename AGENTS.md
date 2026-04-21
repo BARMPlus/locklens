@@ -68,7 +68,9 @@
 当前远程协议策略如下：
 
 1. `github.com` / `gitlab.com` / `gitee.com`
-   - 用户传 HTTPS，则按 HTTPS 执行
+   - 用户传 HTTPS，会先执行一次非交互 `ssh -T git@host` 探测
+   - 如果探测成功，则自动转换成 SSH 执行
+   - 如果探测失败或无法明确判断，则继续按 HTTPS 执行
    - 用户传 SSH，则按 SSH 执行
 
 2. 其他域名

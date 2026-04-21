@@ -24,7 +24,7 @@ export function buildPackageAuditGuideMarkdown() {
     '',
     '## 私有仓库接入',
     '',
-    '- 如果本机 SSH Key 已具备访问权限，可直接审计私有仓库',
+    '- 如果本机 SSH Key 已具备访问权限，GitHub / GitLab / Gitee 的 HTTPS 地址会先尝试通过 ssh -T 判断是否可切换到 SSH',
     '- GitLab 自建实例可通过环境变量 `LOCKLENS_GITLAB_PRIVATE_TOKEN` 访问私有仓库',
     '',
     '## 远程仓库行为',

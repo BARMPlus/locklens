@@ -13,8 +13,8 @@ async function main() {
   // const source = 'https://github.com/BARMPlus/micro-app' // gitHub 公开仓库
   const source = 'https://github.com/BARMPlus/quick-webpack-web' // gitHub 私有仓库（HTTPS 方式）
   // const source = 'git@github.com:BARMPlus/quick-webpack-web.git' // gitHub 私有仓库（SSH 方式）
-  // const source = 'https://gitee.com/BluesYoung-web/admin-vue3-element3-vite2' // gitee 公开仓库（HTTPS 方式，白名单平台会保留原协议）
-  // const source = 'git@gitee.com:BluesYoung-web/admin-vue3-element3-vite2.git' // gitee 公开仓库（SSH 方式，白名单平台会保留原协议）
+  // const source = 'https://gitee.com/BluesYoung-web/admin-vue3-element3-vite2' // gitee 公开仓库（HTTPS 方式）
+  // const source = 'git@gitee.com:BluesYoung-web/admin-vue3-element3-vite2.git' // gitee 公开仓库（SSH 方式）
   // const source = 'https://git.dian.so/devops/dna-frontend.git' // 内网仓库（HTTPS 方式）
   // const source = 'git@git.dian.so:devops/dna-frontend.git' // 内网仓库（SSH 方式）
 

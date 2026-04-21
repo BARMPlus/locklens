@@ -57,6 +57,74 @@ async function resolveAuditSourceForTest(source) {
   return JSON.parse(stdout)
 }
 
+async function resolveAuditSourceWithProbeForTest(source, shouldUseSsh) {
+  // 白名单平台的 HTTPS 输入会先做 ssh -T 探测。
+  // 这里通过注入固定探测结果，稳定校验“探测成功时转 SSH、失败时保留 HTTPS”的正式实现。
+  const evalScript = `
+    import { resolveAuditSourceWithOptions } from './src/audit/git-source/source-resolver.ts'
+
+    async function main() {
+      const result = await resolveAuditSourceWithOptions(process.argv[1], {
+        probeSshAvailability: async () => process.argv[2] === 'true',
+      })
+      console.log(JSON.stringify(result))
+    }
+
+    main().catch((error) => {
+      throw error
+    })
+  `
+
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source, String(shouldUseSsh)],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(stdout)
+}
+
+async function resolveSshTransportProbeStatusForTest({
+  stdout = '',
+  stderr = '',
+  errorCode = '',
+  timedOut = false,
+} = {}) {
+  // 这里直接校验 ssh -T 结果判定函数，避免测试侧自己复制一份关键字规则。
+  const evalScript = `
+    import { resolveSshTransportProbeStatus } from './src/audit/git-source/ssh-transport-probe.ts'
+
+    const result = resolveSshTransportProbeStatus({
+      stdout: process.argv[1],
+      stderr: process.argv[2],
+      errorCode: process.argv[3] || undefined,
+      timedOut: process.argv[4] === 'true',
+    })
+
+    console.log(JSON.stringify({ result }))
+  `
+
+  const { stdout: evalStdout } = await execFileAsync(
+    process.execPath,
+    [
+      './node_modules/tsx/dist/cli.mjs',
+      '--eval',
+      evalScript,
+      stdout,
+      stderr,
+      errorCode,
+      String(timedOut),
+    ],
+    {
+      cwd: projectRoot,
+    }
+  )
+
+  return JSON.parse(evalStdout).result
+}
+
 async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
   // 这里直接复用源码里的远程连通性目标解析逻辑，
   // 保证测试校验的是正式实现，而不是测试侧自己复制一份规则。
@@ -78,14 +146,21 @@ async function resolveRemoteConnectivityTargetForTest(repositoryUrl) {
   return JSON.parse(stdout)
 }
 
-async function resolveRemoteWorkspaceProviderPlanForTest(source, envOverrides = {}) {
+async function resolveRemoteWorkspaceProviderPlanForTest(
+  source,
+  envOverrides = {},
+  shouldUseSshForPublicHosts = false
+) {
   // provider 计划是远程编排层的纯决策结果。
   // 这里直接拿正式实现来校验“命中了哪个 provider，以及前置 TCP 校验该探测哪个目标”。
   const evalScript = `
-    import { resolveAuditSource, resolveRemoteWorkspaceProviderPlan } from './src/audit/index.ts'
+    import { resolveRemoteWorkspaceProviderPlan } from './src/audit/index.ts'
+    import { resolveAuditSourceWithOptions } from './src/audit/git-source/source-resolver.ts'
 
     async function main() {
-      const resolvedSource = await resolveAuditSource(process.argv[1])
+      const resolvedSource = await resolveAuditSourceWithOptions(process.argv[1], {
+        probeSshAvailability: async () => process.argv[2] === 'true',
+      })
       if (resolvedSource.kind !== 'remote') {
         throw new Error('Expected a remote source.')
       }
@@ -101,7 +176,7 @@ async function resolveRemoteWorkspaceProviderPlanForTest(source, envOverrides = 
 
   const { stdout } = await execFileAsync(
     process.execPath,
-    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source],
+    ['./node_modules/tsx/dist/cli.mjs', '--eval', evalScript, source, String(shouldUseSshForPublicHosts)],
     {
       cwd: projectRoot,
       env: {
@@ -460,9 +535,39 @@ test('CLI: 缺少必填 source 应返回参数错误退出码', async () => {
   assert.match(result.stderr, /Missing required argument: --source/)
 })
 
-test('Source Resolver: gitee HTTPS 地址应保留原始协议', async () => {
+test('Source Resolver: github HTTPS 地址在 ssh -T 成功时应转换为 SSH', async () => {
+  const source = 'https://github.com/BARMPlus/micro-app'
+  const resolvedSource = await resolveAuditSourceWithProbeForTest(source, true)
+
+  assert.equal(resolvedSource.kind, 'remote')
+  assert.equal(resolvedSource.inputSource, source)
+  assert.equal(resolvedSource.repositoryUrl, 'git@github.com:BARMPlus/micro-app.git')
+})
+
+test('Source Resolver: gitlab HTTPS 地址在 ssh -T 成功时应转换为 SSH', async () => {
+  const source = 'https://gitlab.com/group/repo.git'
+  const resolvedSource = await resolveAuditSourceWithProbeForTest(source, true)
+
+  assert.equal(resolvedSource.kind, 'remote')
+  assert.equal(resolvedSource.inputSource, source)
+  assert.equal(resolvedSource.repositoryUrl, 'git@gitlab.com:group/repo.git')
+})
+
+test('Source Resolver: gitee HTTPS 地址在 ssh -T 成功时应转换为 SSH', async () => {
   const source = 'https://gitee.com/BluesYoung-web/admin-vue3-element3-vite2'
-  const resolvedSource = await resolveAuditSourceForTest(source)
+  const resolvedSource = await resolveAuditSourceWithProbeForTest(source, true)
+
+  assert.equal(resolvedSource.kind, 'remote')
+  assert.equal(resolvedSource.inputSource, source)
+  assert.equal(
+    resolvedSource.repositoryUrl,
+    'git@gitee.com:BluesYoung-web/admin-vue3-element3-vite2.git'
+  )
+})
+
+test('Source Resolver: 白名单 HTTPS 地址在 ssh -T 失败时应保留原始协议', async () => {
+  const source = 'https://github.com/BARMPlus/micro-app'
+  const resolvedSource = await resolveAuditSourceWithProbeForTest(source, false)
 
   assert.equal(resolvedSource.kind, 'remote')
   assert.equal(resolvedSource.inputSource, source)
@@ -534,6 +639,38 @@ test('Remote Connectivity: 超时错误文案应包含 5s', async () => {
   assert.equal(error.code, 'REMOTE_CONNECTIVITY_FAILED')
   assert.match(error.message, /Timeout: 5s/)
   assert.match(error.message, /ETIMEDOUT/)
+})
+
+test('SSH Probe: 认证成功但无 shell 的输出应判定为成功', async () => {
+  const result = await resolveSshTransportProbeStatusForTest({
+    stderr: "Hi octocat! You've successfully authenticated, but GitHub does not provide shell access.",
+  })
+
+  assert.equal(result, 'success')
+})
+
+test('SSH Probe: Permission denied \\(publickey\\) 应判定为失败', async () => {
+  const result = await resolveSshTransportProbeStatusForTest({
+    stderr: 'git@gitlab.com: Permission denied (publickey).',
+  })
+
+  assert.equal(result, 'failure')
+})
+
+test('SSH Probe: ssh 命令不存在应判定为失败', async () => {
+  const result = await resolveSshTransportProbeStatusForTest({
+    errorCode: 'ENOENT',
+  })
+
+  assert.equal(result, 'failure')
+})
+
+test('SSH Probe: 超时应判定为失败', async () => {
+  const result = await resolveSshTransportProbeStatusForTest({
+    timedOut: true,
+  })
+
+  assert.equal(result, 'failure')
 })
 
 test('Remote Provider: gitlab.com + GitLab token 应命中 GitLab provider', async () => {

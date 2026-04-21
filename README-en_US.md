@@ -39,8 +39,10 @@ npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitl
 Audit private repositories:
 
 ```bash
-# Supports auditing private repositories on GitHub, GitLab, and privately deployed Git servers,
-# as long as your local SSH key has permission to access the repository
+# For HTTPS URLs on GitHub, GitLab, and Gitee, locklens will first try ssh -T
+# to determine whether the local SSH key can be used for that Git host.
+# If SSH is available, locklens will automatically switch to SSH execution.
+# For other private Git servers, rely on a locally authorized SSH key.
 npx -y locklens --source https://git.company.local/group/repo.git
 # Recommended for CI scenarios. Only supports privately deployed GitLab servers.
 # Configure a Personal Access Token with permission to access the repository

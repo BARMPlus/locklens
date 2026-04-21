@@ -39,7 +39,8 @@ npx -y locklens --output-format json --source https://gitlab.com/gitlab-org/gitl
 私有仓库审计：
 
 ```bash
-# 支持Github、Gitlab Private 应用审计、支持私有部署的 Git 服务器应用审计，前提是你本机的 SSH Key 有权限访问该仓库
+# 对于 GitHub、GitLab、Gitee 的 HTTPS 地址，locklens 会先尝试通过 ssh -T 判断本机 SSH Key 是否可用于该 Git 服务器；
+# 如果可用，会自动切换为 SSH 方式执行。其他私有 Git 服务器仍建议直接依赖本机已有权限的 SSH Key。
 npx -y locklens --source https://git.company.local/group/repo.git
 # 适合 CI 场景，仅支持 私有部署的 GitLab 服务器应用审计，设置 Personal access tokens 权限访问该仓库
 LOCKLENS_GITLAB_PRIVATE_TOKEN=your-token npx -y locklens --source https://git.company.local/group/repo.git 

@@ -88,7 +88,9 @@ npx -y locklens --source /path/to/project --skip-dev --threshold high
 
 ## 远程与私有仓库
 
-- `github.com`、`gitlab.com`、`gitee.com` 会保留用户原始协议
+- `github.com`、`gitlab.com`、`gitee.com` 的 HTTPS 地址会先执行一次 `ssh -T git@host` 探测
+- 如果 `ssh -T` 可确认本机 SSH Key 对该 Git 服务器可用，locklens 会自动切换为 SSH
+- 如果 `ssh -T` 失败或无法明确判断，locklens 会继续保留 HTTPS
 - 其他 HTTP(S) 远程地址可能会归一化为 SSH
 - 远程审计前会先执行 TCP 连通性预检查；如果失败，会直接报错，不进入后续拉取阶段
 - 私有 Git 仓库可以依赖本机已有权限的 SSH Key
