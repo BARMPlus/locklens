@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 
@@ -187,13 +188,24 @@ async function main() {
   await runMcpServer()
 }
 
-// 这里等价于 CommonJS 里的“是否为主入口模块”判断。
-// 只有在 `node build/client.js` 或命令行直接执行当前文件时才运行 main()；
-// 如果只是被测试代码或其他模块 import，则不自动启动 CLI / MCP server，
-// 这样测试就可以安全地复用 createAuditServer() 等导出能力。
-const entryFilePath = process.argv[1] ? fileURLToPath(import.meta.url) === process.argv[1] : false
+function isExecutedAsEntryModule() {
+  if (!process.argv[1]) {
+    return false
+  }
 
-if (entryFilePath) {
+  try {
+    // 这里通过 realpath 比较真实文件路径，而不是直接比较 argv[1] 的文本值。
+    // 原因是 `npx locklens`、npm bin shim、软链接等场景下，
+    // process.argv[1] 往往不是源码里这个文件的字面路径，
+    // 但它最终会解析到同一个真实文件。
+    // 这样既能兼容命令行直跑，也能避免测试 import 时误启动 main()。
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1])
+  } catch {
+    return false
+  }
+}
+
+if (isExecutedAsEntryModule()) {
   main().catch((error) => {
     if (error instanceof AuditError) {
       process.stderr.write(`${error.message}\n`)
