@@ -23,6 +23,7 @@
 - `tsup` 构建
 - `tsx` 运行手动联调脚本
 - `eslint` + `lint-staged` + `husky`
+- `commitlint`
 - `@modelcontextprotocol/sdk`
 - `audit-ci`
 
@@ -245,3 +246,9 @@ npm publish --dry-run
 ```
 
 确认 tarball 文件列表符合预期
+6. 当前仓库要求使用 Conventional Commits，提交信息需符合：
+   - `feat: 支持远程仓库审计`
+   - `fix(cli): 修复 threshold 参数解析`
+   - `docs: 更新 MCP 使用说明`
+   - `chore(release): 1.1.4`
+7. commit message 校验通过 Husky `commit-msg` hook 执行，不要把这类校验混进 `pre-commit`
