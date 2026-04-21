@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsup",
     "start": "yarn build && node build/client.js",
+    "release": "node scripts/release.mjs",
     "test:cli": "yarn build && node --test tests/cli",
     "test:manual:local": "npx tsx src/tests/audit-local-manual-test.ts",
     "test:manual:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
@@ -68,6 +69,7 @@
     "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
+    "standard-version": "^9.5.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",

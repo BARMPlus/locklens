@@ -137,6 +137,7 @@ Yarn 与 npm / pnpm 的处理是分开的，不要随意合并：
 yarn build
 yarn typecheck
 yarn lint
+yarn release
 ```
 
 ### 正式 CLI 自动化测试
@@ -171,6 +172,23 @@ yarn test:manual:remote
 - 不属于正式自动化测试体系
 
 ## 发布约定
+
+推荐发版流程：
+
+```bash
+yarn release
+npm publish --dry-run
+npm publish
+```
+
+其中 `yarn release` 会：
+
+- 先执行 `yarn test:cli`
+- 在交互式终端中选择 `patch` / `minor` / `major`
+- 自动更新 `package.json` 的 `version`
+- 自动生成或更新 `CHANGELOG.md`
+- 自动创建 release commit
+- 自动创建 `v<version>` 格式的 Git tag
 
 发布前会自动执行：
 
