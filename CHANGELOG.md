@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://github.com/BARMPlus/locklens/compare/v1.1.6...v1.1.7) (2026-04-22)
+
+
+### Bug Fixes
+
+* 修复 Yarn aduit问题 ([c95f83b](https://github.com/BARMPlus/locklens/commit/c95f83b9301614fcdf5afc64f613037db1f03fb4))
+
 ### [1.1.6](https://github.com/BARMPlus/locklens/compare/v1.1.5...v1.1.6) (2026-04-22)
 
 
