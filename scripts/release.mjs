@@ -72,7 +72,7 @@ async function promptReleaseType() {
 
 async function main() {
   if (!isInteractiveTerminal()) {
-    stderr.write('yarn release 需要在交互式终端中执行，当前环境无法进行版本类型选择。\n')
+    stderr.write('pnpm release 需要在交互式终端中执行，当前环境无法进行版本类型选择。\n')
     exit(1)
   }
 
@@ -83,11 +83,11 @@ async function main() {
     exit(1)
   }
 
-  stdout.write(`已选择 ${releaseType} 发版，开始执行 yarn test:cli...\n`)
-  await runCommand('yarn', ['test:cli'])
+  stdout.write(`已选择 ${releaseType} 发版，开始执行 pnpm test:cli...\n`)
+  await runCommand('pnpm', ['test:cli'])
 
   stdout.write(`测试通过，开始执行 standard-version (${releaseType})...\n`)
-  await runCommand('yarn', ['standard-version', '--release-as', releaseType])
+  await runCommand('pnpm', ['exec', 'standard-version', '--release-as', releaseType])
 
   stdout.write('发版文件、release commit 和 git tag 已生成。\n')
 }

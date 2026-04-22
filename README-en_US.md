@@ -21,9 +21,16 @@ It can audit a local project directory or a remote Git repository, and supports 
 
 ---
 
-## Installation and Environment
+## Requirements
 
-- `node >= 18`
+- `Node >=18`
+- `(Optional) Yarn ^1.12.3 || Yarn >=2.4.0 && <4.0.0`
+- `(Optional) PNPM >=4.3.0`
+- `(Optional) Bun`
+
+---
+
+## Installation and Environment
 
 Audit local and remote repositories:
 

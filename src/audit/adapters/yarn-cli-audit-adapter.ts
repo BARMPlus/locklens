@@ -8,7 +8,7 @@ import { finished } from 'node:stream/promises'
 
 import { gitHubAdvisoryUrlToAdvisoryId, type Summary as AuditCiSummary } from 'audit-ci'
 
-import { DEFAULT_AUDIT_REGISTRY, LOCKLENS_TEMP_ARTIFACT_PREFIX } from '../constants'
+import { LOCKLENS_TEMP_ARTIFACT_PREFIX } from '../constants'
 import { AuditExecutionError } from '../errors'
 import type {
   AuditCiAdapterInput,
@@ -20,6 +20,11 @@ import type {
 interface YarnAuditPayload {
   advisories: Record<string, unknown>
   metadata: Record<string, unknown> | null
+}
+
+interface YarnAuditCommandResult {
+  stdout: string
+  payload: YarnAuditPayload
 }
 
 const YARN_AUDIT_TIMEOUT_MS = 60_000
@@ -131,13 +136,15 @@ function collectJsonObjectsFromBlocks(stdout: string) {
 }
 
 function collectJsonObjects(stdout: string) {
-  const objectsFromLines = collectJsonObjectsFromLines(stdout)
-
-  if (objectsFromLines.length > 0) {
-    return objectsFromLines
+  const objectsFromBlocks = collectJsonObjectsFromBlocks(stdout)
+  // `audit-ci --report-type full --output-format json` 在 Yarn Berry 下会输出格式化后的完整大对象。
+  // 这时如果先走逐行解析，可能会误命中内部零散的小对象，反而把最关键的顶层 payload 丢掉。
+  // 因此这里优先按“完整 JSON 块”提取；只有块级解析完全拿不到结果时，才退回逐行兜底。
+  if (objectsFromBlocks.length > 0) {
+    return objectsFromBlocks
   }
 
-  return collectJsonObjectsFromBlocks(stdout)
+  return collectJsonObjectsFromLines(stdout)
 }
 
 function normalizeClassicEventPayload(jsonObjects: unknown[]): YarnAuditPayload | null {
@@ -346,8 +353,6 @@ function buildYarnSummary(payload: YarnAuditPayload, threshold: AuditThreshold):
 }
 
 function buildAuditCiArgs(input: AuditCiAdapterInput) {
-  const effectiveRegistry = input.registry ?? DEFAULT_AUDIT_REGISTRY
-
   return [
     // 这里始终使用 `--low` 拉取完整漏洞集合，不能直接复用调用方传入的 threshold。
     // 原因是：
@@ -357,11 +362,12 @@ function buildAuditCiArgs(input: AuditCiAdapterInput) {
     // 后面再怎么归一化，也拿不到低等级漏洞了。
     '--low',
     '--report-type',
-    'important',
+    // Yarn Berry 在 `important` 模式下只会输出 metadata，
+    // 不会带上 advisory 明细，导致后面的归一化阶段只能拿到总数、拿不到具体漏洞条目。
+    // 这里改成 `full`，确保 stdout 里保留完整 JSON 事件流，后续才能稳定提取 advisories。
+    'full',
     '--output-format',
     'json',
-    '--registry',
-    effectiveRegistry,
     ...(input.skipDev ? ['--skip-dev'] : []),
     ...(typeof input.retryCount === 'number' ? ['--retry-count', String(input.retryCount)] : []),
     ...(input.passEnoAudit ? ['--pass-enoaudit'] : []),
@@ -434,7 +440,7 @@ function buildAuditCiCommand(input: AuditCiAdapterInput) {
   }
 }
 
-async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
+async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<YarnAuditCommandResult> {
   const stdoutFilePath = createTempAuditFilePath('stdout.log')
   const stderrMessages: string[] = []
 
@@ -531,7 +537,10 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<string> {
   const payload = buildYarnAuditPayload(stdout)
 
   if (payload) {
-    return stdout
+    return {
+      stdout,
+      payload,
+    }
   }
 
   const stderr = stderrMessages.join('\n').trim()
@@ -546,12 +555,7 @@ export async function runYarnCliAuditAdapter(
   input: AuditCiAdapterInput,
 ): Promise<AuditCiAdapterResult> {
   try {
-    const stdout = await runAuditCiCommand(input)
-    const payload = buildYarnAuditPayload(stdout)
-
-    if (!payload) {
-      throw new AuditExecutionError('Yarn audit payload is empty')
-    }
+    const { payload } = await runAuditCiCommand(input)
 
     return {
       auditSummary: buildYarnSummary(payload, input.threshold),

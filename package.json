@@ -14,16 +14,16 @@
     "commitlint": "commitlint",
     "format": "prettier --write \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
     "format:check": "prettier --check \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
-    "start": "yarn build && node build/client.js",
+    "start": "pnpm build && node build/client.js",
     "release": "node scripts/release.mjs",
-    "test:cli": "yarn build && node --test tests/cli",
-    "test:manual:local": "npx tsx src/tests/audit-local-manual-test.ts",
-    "test:manual:remote": "npx tsx src/tests/audit-remote-manual-test.ts",
+    "test:cli": "pnpm build && node --test tests/cli",
+    "test:manual:local": "tsx src/tests/audit-local-manual-test.ts",
+    "test:manual:remote": "tsx src/tests/audit-remote-manual-test.ts",
     "lint": "eslint \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\"",
     "lint:fix": "eslint \"{src,tests,scripts}/**/*.{ts,tsx,js,mjs,cjs}\" --fix",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "yarn test:cli"
+    "prepublishOnly": "pnpm test:cli"
   },
   "keywords": [
     "lockfile",

@@ -135,17 +135,17 @@ Yarn 与 npm / pnpm 的处理是分开的，不要随意合并：
 ### 开发 / 构建
 
 ```bash
-yarn build
-yarn format:check
-yarn typecheck
-yarn lint
-yarn release
+pnpm build
+pnpm format:check
+pnpm typecheck
+pnpm lint
+pnpm release
 ```
 
 ### 正式 CLI 自动化测试
 
 ```bash
-yarn test:cli
+pnpm test:cli
 ```
 
 说明：
@@ -159,13 +159,13 @@ yarn test:cli
 本地：
 
 ```bash
-yarn test:manual:local
+pnpm test:manual:local
 ```
 
 远程：
 
 ```bash
-yarn test:manual:remote
+pnpm test:manual:remote
 ```
 
 说明：
@@ -178,14 +178,14 @@ yarn test:manual:remote
 推荐发版流程：
 
 ```bash
-yarn release
+pnpm release
 npm publish --dry-run
 npm publish
 ```
 
-其中 `yarn release` 会：
+其中 `pnpm release` 会：
 
-- 先执行 `yarn test:cli`
+- 先执行 `pnpm test:cli`
 - 在交互式终端中选择 `patch` / `minor` / `major`
 - 自动更新 `package.json` 的 `version`
 - 自动生成或更新 `CHANGELOG.md`
@@ -195,7 +195,7 @@ npm publish
 发布前会自动执行：
 
 ```bash
-yarn test:cli
+pnpm test:cli
 ```
 
 由 `package.json` 的 `prepublishOnly` 负责触发。
