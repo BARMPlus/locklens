@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/BARMPlus/locklens/compare/v1.1.5...v1.1.6) (2026-04-22)
+
+
+### Features
+
+* 支持yarn v3 ([d9f6601](https://github.com/BARMPlus/locklens/commit/d9f6601f04f1e919e568fd97069ebe48382a1405))
+
+
+### Chores
+
+* 更新README ([e860d75](https://github.com/BARMPlus/locklens/commit/e860d75b28e98398dc1a01fe5d8c8e79557da407))
+
 ### [1.1.5](https://github.com/BARMPlus/locklens/compare/v1.1.4...v1.1.5) (2026-04-21)
 
 
