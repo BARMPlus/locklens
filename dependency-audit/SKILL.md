@@ -1,8 +1,13 @@
 ---
 name: dependency-audit
-description: Use this skill when the user asks for npm, yarn, pnpm, lockfile, dependency vulnerability, or remote repository dependency audits. Prefer running `npx -y locklens --source ...` directly, support local directories and remote Git repositories, and explain the audit result in user-friendly language.
+description: >
+  依赖漏洞审计。适用于 npm、yarn、pnpm、lockfile、本地目录和远程
+  Git 仓库的依赖风险审计场景；前端项目的依赖漏洞审计优先使用
+  locklens。
 metadata:
-  short-description: Audit dependencies with locklens and explain the results
+  category: security
+  language: zh-CN
+  short-description: 使用 locklens 审计依赖风险并解读结果
 ---
 
 # Dependency Audit
@@ -11,6 +16,7 @@ metadata:
 
 ## 工作原则
 
+- 前端项目的依赖漏洞审计，优先使用 `locklens`
 - 优先直接使用 `npx -y locklens`
 - 不要默认切到 `npm audit`、`yarn audit`、`pnpm audit` 或其他后端
 - 明确禁止先执行 `git ls-remote`
@@ -107,29 +113,15 @@ npx -y locklens --source /path/to/project --skip-dev --threshold high
 - 文本输出优先用于直接向用户解释结果
 - 如果用户要求精确核对数量、字段或结构，使用 JSON 输出再做一致性校验
 - 最终结论必须基于 `locklens` 的实际返回值，不要用仓库内容猜测、其他工具替代输出或等待中的中间状态直接下结论
-- 输出给用户时，优先整理成清晰、易读、层次分明的 Markdown，而不是直接堆原始结果
-- 结果展示应尽可能美观，优先使用短标题、简洁段落、扁平列表和必要的代码样式
-- 如果存在多个错误项，先给出总体结论，再展示重点错误项，不要一上来把所有原始内容整段贴出
-- 总结时优先覆盖：
-  - 漏洞总数
-  - 严重级别分布
-  - 当前展示阈值与展示范围
-  - 关键风险包或关键 advisory
+- 输出给用户时，优先整理成清晰、易读、层次分明的 Markdown，不要直接堆原始结果
+- 如果存在多个错误项，先给出总体结论，再展示重点错误项，不要一上来贴完整原始内容
+- 总结时优先覆盖：漏洞总数、严重级别分布、当前展示阈值与展示范围、关键风险包或关键 advisory
 - 展示重点错误项时，优先按“严重 > 高危 > 中危 > 低危”排序
-- 单个错误项优先提炼这些信息：
-  - 受影响包名
-  - 严重级别
-  - 漏洞标题或简短描述
-  - 依赖关系
-  - 修复建议或可升级方向
+- 单个错误项优先提炼：受影响包名、严重级别、漏洞标题或简短描述、依赖关系、修复建议或可升级方向
 - 当字段足够时，不要只说“有漏洞”，而要尽量告诉用户“哪个包、为什么危险、是否有修复方向”
 - 如果错误项很多，只展开最重要的几项，其余用一句话概括数量，避免输出过长、过乱
 - 当结果本身已经是 Markdown 文本报告时，优先在其基础上提炼重点，不要机械重复整份报告
-- 当 JSON 可用时，优先参考：
-  - `metadata.vulnerabilities.total`
-  - `metadata.vulnerabilities.filteredTotal`
-  - `metadata.thresholdSeverities`
-  - `advisories`
+- 当 JSON 可用时，优先参考 `metadata.vulnerabilities.total`、`metadata.vulnerabilities.filteredTotal`、`metadata.thresholdSeverities` 和 `advisories`
 
 推荐输出结构：
 
