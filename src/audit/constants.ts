@@ -5,6 +5,19 @@ export const LOCKFILE_PRIORITY = [
   'pnpm-lock.yaml',
 ] as const
 
+// 远程最小工作区只保留单包项目审计真正需要的根目录文件。
+// 这里明确不覆盖 monorepo / workspace 语义，因此不包含 pnpm-workspace.yaml 一类工作区配置。
+export const REMOTE_AUDIT_ROOT_FILES = [
+  'package.json',
+  'package-lock.json',
+  'npm-shrinkwrap.json',
+  'yarn.lock',
+  'pnpm-lock.yaml',
+  '.npmrc',
+  '.yarnrc.yml',
+  '.pnpmfile.cjs',
+] as const
+
 export const DEFAULT_AUDIT_THRESHOLD = 'low' as const
 export const DEFAULT_REPORT_TYPE = 'important' as const
 // 默认输出改为文本报告，只有显式传 json 时才返回结构化结果。

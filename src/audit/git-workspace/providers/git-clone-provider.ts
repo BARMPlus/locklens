@@ -3,18 +3,10 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 
 import { PackageManifestNotFoundError, RemoteWorkspaceCleanupError } from '../../errors'
-import { LOCKLENS_TEMP_ARTIFACT_PREFIX } from '../../constants'
+import { LOCKLENS_TEMP_ARTIFACT_PREFIX, REMOTE_AUDIT_ROOT_FILES } from '../../constants'
 import type { PreparedAuditWorkspace, ResolvedRemoteAuditSource } from '../../types'
 import { runGitCommand } from '../git-command'
 import type { RemoteWorkspaceProvider } from './shared'
-
-const ROOT_AUDIT_FILES = [
-  'package.json',
-  'package-lock.json',
-  'npm-shrinkwrap.json',
-  'yarn.lock',
-  'pnpm-lock.yaml',
-] as const
 
 async function ensurePackageManifestExists(source: ResolvedRemoteAuditSource, directory: string) {
   try {
@@ -89,7 +81,7 @@ export const gitCloneProvider: RemoteWorkspaceProvider = {
       })
 
       await runGitCommand(
-        ['-C', workspaceDirectory, 'sparse-checkout', 'set', ...ROOT_AUDIT_FILES],
+        ['-C', workspaceDirectory, 'sparse-checkout', 'set', ...REMOTE_AUDIT_ROOT_FILES],
         {
           source: source.repositoryUrl,
           step: 'sparse-set',

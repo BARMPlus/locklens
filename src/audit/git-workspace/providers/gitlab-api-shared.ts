@@ -9,17 +9,9 @@ import {
   PackageManifestNotFoundError,
   RemoteWorkspaceCleanupError,
 } from '../../errors'
-import { LOCKLENS_TEMP_ARTIFACT_PREFIX } from '../../constants'
+import { LOCKLENS_TEMP_ARTIFACT_PREFIX, REMOTE_AUDIT_ROOT_FILES } from '../../constants'
 import type { PreparedAuditWorkspace, ResolvedRemoteAuditSource } from '../../types'
 import { parseRemoteRepositoryLocator } from './shared'
-
-const ROOT_AUDIT_FILES = [
-  'package.json',
-  'package-lock.json',
-  'npm-shrinkwrap.json',
-  'yarn.lock',
-  'pnpm-lock.yaml',
-] as const
 
 interface GitLabApiContext {
   providerName: 'gitlab' | 'gitlab-self-managed'
@@ -171,7 +163,7 @@ export async function fetchWorkspaceThroughGitLabApi(
   try {
     let hasPackageManifest = false
 
-    for (const fileName of ROOT_AUDIT_FILES) {
+    for (const fileName of REMOTE_AUDIT_ROOT_FILES) {
       // 第一版只拉取根目录固定文件集合，保持和现有 lockfile 检测逻辑一致，
       // 不在这里扩展 monorepo 子目录或任意路径拉取能力。
       const rawFileUrl =

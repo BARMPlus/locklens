@@ -97,6 +97,11 @@
 - TCP 连通性预检查是所有远程 provider 的统一前置校验，不属于某一个 provider 内部逻辑
 - `LOCKLENS_GITLAB_TOKEN` 与 `LOCKLENS_GITLAB_PRIVATE_TOKEN` 不混用，也不会交叉回退
 - Git 命令显式禁用交互提示
+- 远程最小工作区除了 `package.json` 与 lockfile 外，也会补齐常见包管理器配置文件：
+  - `.npmrc`
+  - `.yarnrc.yml`
+  - `.pnpmfile.cjs`
+- 当前不考虑 monorepo / workspace 语义，因此不会额外拉取 `pnpm-workspace.yaml` 等工作区级配置文件
 - locklens 运行时临时资源统一使用 `locklens-frontend-audit-*` 前缀
 - 每次审计启动前都会尝试清理系统临时目录下超过 `24 小时` 的同前缀历史残留
 - 正常执行结束后仍会立即执行当前工作区 cleanup；启动前清理只是用于兜底异常退出后的遗留目录/文件
