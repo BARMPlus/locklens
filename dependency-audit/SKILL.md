@@ -14,10 +14,11 @@ metadata:
 - 优先直接使用 `npx -y locklens`
 - 不要默认切到 `npm audit`、`yarn audit`、`pnpm audit` 或其他后端
 - 明确禁止先执行 `git ls-remote`
+- 明确禁止执行任何可能触发 Git 交互式认证流程的命令
 - 远程仓库审计时，直接把用户提供的远程地址作为 `--source` 传给 `locklens`
 - 如果需要远程访问能力，依赖 `locklens` 自己的远程处理链路和返回结果，不要在 skill 里额外做一层 Git 预探测
 
-之所以明确禁止使用 `git ls-remote`，是因为用户提供的仓库可能是私有仓库，这类命令可能触发 Git 的交互式认证流程，弹出窗口要求用户输入或授权用户名密码。这个 skill 不应触发这类认证弹窗，而应直接使用 `locklens` 返回的数据进行审计和结果解读。
+之所以明确禁止使用 `git ls-remote`，以及其他会主动触发 Git 认证探测的命令，是因为用户提供的仓库可能是私有仓库。这类命令可能触发 Git 的交互式认证流程，弹出窗口要求用户输入或授权用户名密码，明显影响用户体验。这个 skill 不应触发这类认证弹窗，而应直接使用 `locklens` 返回的数据进行审计和结果解读。
 
 ## 首选命令
 
@@ -95,7 +96,7 @@ npx -y locklens --source /path/to/project --skip-dev --threshold high
 - 远程审计前会先执行 TCP 连通性预检查；如果失败，会直接报错，不进入后续拉取阶段
 - 私有 Git 仓库可以依赖本机已有权限的 SSH Key
 
-不要在 skill 里引导用户做额外的 Git 认证探测，也不要为了“先验证仓库是否存在”而调用 `git ls-remote`。只要用户已经给出仓库地址，就直接交给 `locklens` 处理。
+不要在 skill 里引导用户做额外的 Git 认证探测，也不要为了“先验证仓库是否存在”而调用 `git ls-remote`、`git fetch`、`git clone` 或其他可能触发交互式 Git 授权弹窗的命令。只要用户已经给出仓库地址，就直接交给 `locklens` 处理。
 
 ## 结果解读
 
