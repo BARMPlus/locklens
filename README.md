@@ -30,6 +30,16 @@
 
 ---
 
+## 结果示例
+
+可以直接查看仓库内的示例输出：
+
+- 中文文本报告示例：[audit.md](examples/reports/audit.md)
+- 英文文本报告示例：[audit-en_US.md](examples/reports/audit-en_US.md)
+- JSON 输出示例：[audit.json](examples/reports/audit.json)
+
+---
+
 ## 安装与环境
 
 本地仓库、线上仓库审计：

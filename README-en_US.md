@@ -30,6 +30,16 @@ It can audit a local project directory or a remote Git repository, and supports 
 
 ---
 
+## Output Examples
+
+You can view the example outputs directly in this repository:
+
+- Chinese text report example: [audit.md](examples/reports/audit.md)
+- English text report example: [audit-en_US.md](examples/reports/audit-en_US.md)
+- JSON output example: [audit.json](examples/reports/audit.json)
+
+---
+
 ## Installation and Environment
 
 Audit local and remote repositories:

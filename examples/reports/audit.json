@@ -1,0 +1,1176 @@
+{
+  "runtime": {
+    "source": "https://github.com/BARMPlus/micro-app",
+    "sourceType": "remote",
+    "repositoryUrl": "git@github.com:BARMPlus/micro-app.git",
+    "resolvedRef": "dev",
+    "directory": "/var/folders/tq/j7p_3r151tj0397b6blq9tpm0000gq/T/locklens-frontend-audit-remote-m7SiPK",
+    "packageManager": "yarn",
+    "lockfileName": "yarn.lock",
+    "lockfilePath": "/var/folders/tq/j7p_3r151tj0397b6blq9tpm0000gq/T/locklens-frontend-audit-remote-m7SiPK/yarn.lock",
+    "detectedLockFiles": [
+      "yarn.lock"
+    ],
+    "normalized": true
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 6,
+      "moderate": 29,
+      "high": 29,
+      "critical": 6,
+      "total": 70,
+      "filteredTotal": 70
+    },
+    "thresholdSeverities": [
+      "low",
+      "moderate",
+      "high",
+      "critical"
+    ],
+    "dependencies": 1168,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1168
+  },
+  "advisories": [
+    {
+      "id": "GHSA-23c5-xmqv-rm74",
+      "severity": "high",
+      "moduleName": "minimatch",
+      "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
+      "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch",
+        "dts-bundle>glob>minimatch",
+        "eslint>minimatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-25h7-pfq9-p65f",
+      "severity": "high",
+      "moduleName": "flatted",
+      "title": "flatted vulnerable to unbounded recursion DoS in parse() revive phase",
+      "url": "https://github.com/advisories/GHSA-25h7-pfq9-p65f",
+      "paths": [
+        "eslint>file-entry-cache>flat-cache>flatted"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-2g4f-4pwh-qvx6",
+      "severity": "moderate",
+      "moduleName": "ajv",
+      "title": "ajv has ReDoS when using `$data` option",
+      "url": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6",
+      "paths": [
+        "coveralls>request>har-validator>ajv",
+        "eslint>@eslint/eslintrc>ajv",
+        "eslint>ajv",
+        "eslint>table>ajv"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-38fc-wpqx-33j7",
+      "severity": "moderate",
+      "moduleName": "trim-off-newlines",
+      "title": "Uncontrolled Resource Consumption in trim-off-newlines",
+      "url": "https://github.com/advisories/GHSA-38fc-wpqx-33j7",
+      "paths": [
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>trim-off-newlines"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-3949-f494-cm99",
+      "severity": "high",
+      "moduleName": "prismjs",
+      "title": "Cross-site Scripting in Prism",
+      "url": "https://github.com/advisories/GHSA-3949-f494-cm99",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>prismjs",
+        "docsify-cli>docsify>prismjs"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-39q2-94rc-95cp",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify's ADD_TAGS function form bypasses FORBID_TAGS due to short-circuit evaluation",
+      "url": "https://github.com/advisories/GHSA-39q2-94rc-95cp",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-3h5v-q93c-6h6q",
+      "severity": "high",
+      "moduleName": "ws",
+      "title": "ws affected by a DoS when handling a request with many HTTP headers",
+      "url": "https://github.com/advisories/GHSA-3h5v-q93c-6h6q",
+      "paths": [
+        "docsify-cli>livereload>ws",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>ws",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>ws",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>ws",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>ws"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-3ppc-4f35-3m26",
+      "severity": "high",
+      "moduleName": "minimatch",
+      "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
+      "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch",
+        "dts-bundle>glob>minimatch",
+        "eslint>minimatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-3v7f-55p6-f55p",
+      "severity": "moderate",
+      "moduleName": "picomatch",
+      "title": "Picomatch: Method Injection in POSIX Character Classes causes incorrect Glob Matching",
+      "url": "https://github.com/advisories/GHSA-3v7f-55p6-f55p",
+      "paths": [
+        "@rollup/plugin-babel>@rollup/pluginutils>picomatch",
+        "@typescript-eslint/eslint-plugin>@typescript-eslint/experimental-utils>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>picomatch",
+        "@typescript-eslint/parser>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>picomatch",
+        "babel-jest>@jest/transform>jest-util>micromatch>picomatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "ts-jest>jest-util>micromatch>picomatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-3xgq-45jj-v275",
+      "severity": "high",
+      "moduleName": "cross-spawn",
+      "title": "Regular Expression Denial of Service (ReDoS) in cross-spawn",
+      "url": "https://github.com/advisories/GHSA-3xgq-45jj-v275",
+      "paths": [
+        "babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "cross-env>cross-spawn",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "jest>@jest/core>jest-changed-files>execa>cross-spawn",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "jest>jest-cli>@jest/core>jest-changed-files>execa>cross-spawn",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn",
+        "lint-staged>execa>cross-spawn",
+        "npm-run-all>cross-spawn"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-44c6-4v22-4mhx",
+      "severity": "high",
+      "moduleName": "semver-regex",
+      "title": "semver-regex Regular Expression Denial of Service (ReDOS)",
+      "url": "https://github.com/advisories/GHSA-44c6-4v22-4mhx",
+      "paths": [
+        "husky>find-versions>semver-regex"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-48c2-rrv3-qjmp",
+      "severity": "moderate",
+      "moduleName": "yaml",
+      "title": "yaml is vulnerable to Stack Overflow via deeply nested YAML collections",
+      "url": "https://github.com/advisories/GHSA-48c2-rrv3-qjmp",
+      "paths": [
+        "@commitlint/cli>@commitlint/load>cosmiconfig>yaml",
+        "husky>cosmiconfig>yaml"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-4r62-v4vq-hr96",
+      "severity": "moderate",
+      "moduleName": "marked",
+      "title": "Regular Expression Denial of Service (REDoS) in Marked",
+      "url": "https://github.com/advisories/GHSA-4r62-v4vq-hr96",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>marked",
+        "docsify-cli>docsify>marked"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-4wf5-vphf-c2xc",
+      "severity": "high",
+      "moduleName": "terser",
+      "title": "Terser insecure use of regular expressions leads to ReDoS",
+      "url": "https://github.com/advisories/GHSA-4wf5-vphf-c2xc",
+      "paths": [
+        "rollup-plugin-terser>terser"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-4x5v-gmq8-25ch",
+      "severity": "low",
+      "moduleName": "semver-regex",
+      "title": "Regular expression denial of service in semver-regex",
+      "url": "https://github.com/advisories/GHSA-4x5v-gmq8-25ch",
+      "paths": [
+        "husky>find-versions>semver-regex"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-5c6j-r48x-rmvq",
+      "severity": "high",
+      "moduleName": "serialize-javascript",
+      "title": "Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString()",
+      "url": "https://github.com/advisories/GHSA-5c6j-r48x-rmvq",
+      "paths": [
+        "rollup-plugin-terser>serialize-javascript"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-5h7x-68wj-jhwc",
+      "severity": "moderate",
+      "moduleName": "docsify",
+      "title": "Docsify vulnerable to cross-site scripting due to mishandled encoding",
+      "url": "https://github.com/advisories/GHSA-5h7x-68wj-jhwc",
+      "paths": [
+        "docsify-cli>docsify",
+        "docsify-cli>docsify-server-renderer>docsify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-5v2h-r2cx-5xgj",
+      "severity": "high",
+      "moduleName": "marked",
+      "title": "Inefficient Regular Expression Complexity in marked",
+      "url": "https://github.com/advisories/GHSA-5v2h-r2cx-5xgj",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>marked",
+        "docsify-cli>docsify>marked"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-67hx-6x53-jw92",
+      "severity": "critical",
+      "moduleName": "@babel/traverse",
+      "title": "Babel vulnerable to arbitrary code execution when compiling specifically crafted malicious code",
+      "url": "https://github.com/advisories/GHSA-67hx-6x53-jw92",
+      "paths": [
+        "@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "@babel/core>@babel/helper-module-transforms>@babel/traverse",
+        "@babel/core>@babel/traverse",
+        "@babel/preset-env>@babel/plugin-transform-modules-amd>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "babel-jest>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>@jest/core>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helper-module-transforms>@babel/helper-replace-supers>@babel/traverse"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-6rw7-vpxm-498p",
+      "severity": "moderate",
+      "moduleName": "qs",
+      "title": "qs's arrayLimit bypass in its bracket notation allows DoS via memory exhaustion",
+      "url": "https://github.com/advisories/GHSA-6rw7-vpxm-498p",
+      "paths": [
+        "coveralls>request>qs"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-72xf-g2v4-qvf3",
+      "severity": "moderate",
+      "moduleName": "tough-cookie",
+      "title": "tough-cookie Prototype Pollution vulnerability",
+      "url": "https://github.com/advisories/GHSA-72xf-g2v4-qvf3",
+      "paths": [
+        "coveralls>request>tough-cookie",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>tough-cookie",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>tough-cookie",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>tough-cookie",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>tough-cookie"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-76c9-3jph-rj3q",
+      "severity": "low",
+      "moduleName": "on-headers",
+      "title": "on-headers is vulnerable to http response header manipulation",
+      "url": "https://github.com/advisories/GHSA-76c9-3jph-rj3q",
+      "paths": [
+        "live-server>morgan>on-headers"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-7r86-cg39-jmmj",
+      "severity": "high",
+      "moduleName": "minimatch",
+      "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
+      "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch",
+        "dts-bundle>glob>minimatch",
+        "eslint>minimatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-896r-f27r-55mw",
+      "severity": "critical",
+      "moduleName": "json-schema",
+      "title": "json-schema is vulnerable to Prototype Pollution",
+      "url": "https://github.com/advisories/GHSA-896r-f27r-55mw",
+      "paths": [
+        "coveralls>request>http-signature>jsprim>json-schema"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-93q8-gq69-wqmw",
+      "severity": "high",
+      "moduleName": "ansi-regex",
+      "title": "Inefficient Regular Expression Complexity in chalk/ansi-regex",
+      "url": "https://github.com/advisories/GHSA-93q8-gq69-wqmw",
+      "paths": [
+        "@commitlint/cli>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "@commitlint/cli>yargs>string-width>strip-ansi>ansi-regex",
+        "@types/jest>jest-diff>pretty-format>ansi-regex",
+        "@types/jest>pretty-format>ansi-regex",
+        "docsify-cli>update-notifier>boxen>ansi-align>string-width>strip-ansi>ansi-regex",
+        "docsify-cli>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "docsify-cli>yargs>cliui>wrap-ansi>string-width>strip-ansi>ansi-regex",
+        "docsify-cli>yargs>string-width>strip-ansi>ansi-regex",
+        "eslint>strip-ansi>ansi-regex",
+        "eslint>table>strip-ansi>ansi-regex",
+        "jest>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>@jest/globals>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "jest>@jest/core>jest-message-util>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-runner>jest-runtime>@jest/globals>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-runner>jest-runtime>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "jest>@jest/core>jest-runtime>@jest/globals>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-runtime>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "jest>@jest/core>jest-snapshot>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-snapshot>jest-diff>pretty-format>ansi-regex",
+        "jest>@jest/core>jest-snapshot>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>jest-cli>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>@jest/globals>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>jest-cli>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "jest>jest-cli>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>yargs>cliui>wrap-ansi>string-width>strip-ansi>ansi-regex",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>@jest/globals>expect>jest-matcher-utils>jest-diff>pretty-format>ansi-regex",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>yargs>cliui>string-width>strip-ansi>ansi-regex",
+        "jest>jest-cli>yargs>cliui>string-width>strip-ansi>ansi-regex"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-952p-6rrq-rcjv",
+      "severity": "moderate",
+      "moduleName": "micromatch",
+      "title": "Regular Expression Denial of Service (ReDoS) in micromatch",
+      "url": "https://github.com/advisories/GHSA-952p-6rrq-rcjv",
+      "paths": [
+        "@typescript-eslint/eslint-plugin>@typescript-eslint/experimental-utils>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch",
+        "@typescript-eslint/parser>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch",
+        "babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "babel-jest>@jest/transform>jest-haste-map>sane>micromatch",
+        "babel-jest>@jest/transform>jest-util>micromatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>jest-util>micromatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>micromatch",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>micromatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>micromatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>micromatch",
+        "lint-staged>micromatch",
+        "live-server>chokidar>anymatch>micromatch",
+        "live-server>chokidar>readdirp>micromatch",
+        "ts-jest>jest-util>micromatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-968p-4wvh-cqc8",
+      "severity": "moderate",
+      "moduleName": "@babel/helpers",
+      "title": "Babel has inefficient RegExp complexity in generated code with .replace when transpiling named capturing groups",
+      "url": "https://github.com/advisories/GHSA-968p-4wvh-cqc8",
+      "paths": [
+        "@babel/core>@babel/helpers",
+        "@babel/preset-env>@babel/plugin-transform-regenerator>regenerator-transform>@babel/runtime",
+        "@babel/runtime",
+        "@commitlint/cli>@babel/runtime",
+        "babel-jest>@jest/transform>@babel/core>@babel/helpers",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>@babel/helpers",
+        "jest>@jest/core>@jest/transform>@babel/core>@babel/helpers",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helpers",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helpers",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helpers",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helpers",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helpers",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helpers"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-9c47-m6qq-7p4h",
+      "severity": "high",
+      "moduleName": "json5",
+      "title": "Prototype Pollution in JSON5 via Parse Method",
+      "url": "https://github.com/advisories/GHSA-9c47-m6qq-7p4h",
+      "paths": [
+        "@babel/core>json5",
+        "babel-jest>@jest/transform>@babel/core>json5",
+        "eslint-plugin-import>tsconfig-paths>json5",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>json5",
+        "jest>@jest/core>@jest/transform>@babel/core>json5",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>json5",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>json5",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>json5",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>json5",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>json5",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>json5"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-c2c7-rcm5-vvqj",
+      "severity": "high",
+      "moduleName": "picomatch",
+      "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
+      "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
+      "paths": [
+        "@rollup/plugin-babel>@rollup/pluginutils>picomatch",
+        "@typescript-eslint/eslint-plugin>@typescript-eslint/experimental-utils>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>picomatch",
+        "@typescript-eslint/parser>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>picomatch",
+        "babel-jest>@jest/transform>jest-util>micromatch>picomatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>picomatch",
+        "ts-jest>jest-util>micromatch>picomatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-c2qf-rxjj-qqgw",
+      "severity": "high",
+      "moduleName": "semver",
+      "title": "semver vulnerable to Regular Expression Denial of Service",
+      "url": "https://github.com/advisories/GHSA-c2qf-rxjj-qqgw",
+      "paths": [
+        "@babel/core>semver",
+        "@babel/plugin-transform-runtime>semver",
+        "@babel/preset-env>@babel/helper-compilation-targets>semver",
+        "@babel/preset-env>@babel/plugin-proposal-object-rest-spread>@babel/helper-compilation-targets>semver",
+        "@babel/preset-env>core-js-compat>semver",
+        "@babel/preset-env>semver",
+        "@commitlint/cli>@commitlint/lint>@commitlint/is-ignored>semver",
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>meow>normalize-package-data>semver",
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>meow>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "@commitlint/cli>@commitlint/read>git-raw-commits>meow>normalize-package-data>semver",
+        "@commitlint/cli>@commitlint/read>git-raw-commits>meow>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "@typescript-eslint/eslint-plugin>@typescript-eslint/experimental-utils>@typescript-eslint/typescript-estree>semver",
+        "@typescript-eslint/eslint-plugin>semver",
+        "@typescript-eslint/parser>@typescript-eslint/typescript-estree>semver",
+        "babel-jest>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "babel-jest>@jest/transform>@babel/core>semver",
+        "babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "babel-jest>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "babel-jest>babel-plugin-istanbul>istanbul-lib-instrument>semver",
+        "docsify-cli>cp-file>make-dir>semver",
+        "docsify-cli>update-notifier>configstore>make-dir>semver",
+        "docsify-cli>update-notifier>latest-version>package-json>semver",
+        "docsify-cli>update-notifier>semver-diff>semver",
+        "eslint-plugin-import>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "eslint-plugin-node>semver",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>semver",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "jest>@jest/core>@jest/reporters>istanbul-lib-report>make-dir>semver",
+        "jest>@jest/core>@jest/reporters>node-notifier>semver",
+        "jest>@jest/core>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>@jest/core>@jest/transform>@babel/core>semver",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "jest>@jest/core>jest-config>@babel/core>semver",
+        "jest>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-resolve>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "jest>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>jest-snapshot>semver",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>semver",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "jest>@jest/core>jest-resolve>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "jest>jest-cli>@jest/core>@jest/reporters>istanbul-lib-report>make-dir>semver",
+        "jest>jest-cli>@jest/core>@jest/reporters>istanbul-reports>istanbul-lib-report>make-dir>semver",
+        "jest>jest-cli>@jest/core>jest-config>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-resolve>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "jest>jest-cli>@jest/core>jest-config>@jest/test-sequencer>jest-runner>jest-runtime>jest-snapshot>semver",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>@jest/test-sequencer>jest-runner>jest-resolve>read-pkg-up>read-pkg>normalize-package-data>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>@babel/helper-compilation-targets>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>semver",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>execa>cross-spawn>semver",
+        "npm-run-all>cross-spawn>semver",
+        "npm-run-all>read-pkg>normalize-package-data>semver"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-cj63-jhhr-wcxv",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify USE_PROFILES prototype pollution allows event handlers",
+      "url": "https://github.com/advisories/GHSA-cj63-jhhr-wcxv",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-cjmm-f4jc-qw8r",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify ADD_ATTR predicate skips URI validation",
+      "url": "https://github.com/advisories/GHSA-cjmm-f4jc-qw8r",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-cm22-4g7w-348p",
+      "severity": "low",
+      "moduleName": "serve-static",
+      "title": "serve-static vulnerable to template injection that can lead to XSS",
+      "url": "https://github.com/advisories/GHSA-cm22-4g7w-348p",
+      "paths": [
+        "docsify-cli>serve-static"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-crv5-9vww-q3g8",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify has a SAFE_FOR_TEMPLATES bypass in RETURN_DOM mode",
+      "url": "https://github.com/advisories/GHSA-crv5-9vww-q3g8",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-f23m-r3pf-42rh",
+      "severity": "moderate",
+      "moduleName": "lodash",
+      "title": "lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit`",
+      "url": "https://github.com/advisories/GHSA-f23m-r3pf-42rh",
+      "paths": [
+        "@babel/core>lodash",
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>lodash",
+        "@commitlint/cli>@commitlint/load>@commitlint/resolve-extends>lodash",
+        "@commitlint/cli>@commitlint/load>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-f886-m6hf-6m8v",
+      "severity": "moderate",
+      "moduleName": "brace-expansion",
+      "title": "brace-expansion: Zero-step sequence causes process hang and memory exhaustion",
+      "url": "https://github.com/advisories/GHSA-f886-m6hf-6m8v",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch>brace-expansion",
+        "dts-bundle>glob>minimatch>brace-expansion",
+        "eslint>minimatch>brace-expansion",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-f8q6-p94x-37v3",
+      "severity": "high",
+      "moduleName": "minimatch",
+      "title": "minimatch ReDoS vulnerability",
+      "url": "https://github.com/advisories/GHSA-f8q6-p94x-37v3",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch",
+        "dts-bundle>glob>minimatch",
+        "eslint>minimatch",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-fjxv-7rqg-78g4",
+      "severity": "critical",
+      "moduleName": "form-data",
+      "title": "form-data uses unsafe random function in form-data for choosing boundary",
+      "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+      "paths": [
+        "coveralls>request>form-data",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>form-data",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>form-data",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>form-data",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>form-data"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-g4rg-993r-mgx7",
+      "severity": "critical",
+      "moduleName": "shell-quote",
+      "title": "Improper Neutralization of Special Elements used in a Command in Shell-quote",
+      "url": "https://github.com/advisories/GHSA-g4rg-993r-mgx7",
+      "paths": [
+        "npm-run-all>shell-quote"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-gcx4-mw62-g8wm",
+      "severity": "high",
+      "moduleName": "rollup",
+      "title": "DOM Clobbering Gadget found in rollup bundled scripts that leads to XSS",
+      "url": "https://github.com/advisories/GHSA-gcx4-mw62-g8wm",
+      "paths": [
+        "rollup"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-grv7-fg5c-xmjg",
+      "severity": "high",
+      "moduleName": "braces",
+      "title": "Uncontrolled resource consumption in braces",
+      "url": "https://github.com/advisories/GHSA-grv7-fg5c-xmjg",
+      "paths": [
+        "@typescript-eslint/eslint-plugin>@typescript-eslint/experimental-utils>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>braces",
+        "@typescript-eslint/parser>@typescript-eslint/typescript-estree>globby>fast-glob>micromatch>braces",
+        "babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "babel-jest>@jest/transform>jest-haste-map>sane>micromatch>braces",
+        "babel-jest>@jest/transform>jest-util>micromatch>braces",
+        "docsify-cli>livereload>chokidar>braces",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>jest-util>micromatch>braces",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>braces",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>jest-util>micromatch>braces",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces",
+        "lint-staged>micromatch>braces",
+        "live-server>chokidar>anymatch>micromatch>braces",
+        "live-server>chokidar>braces",
+        "ts-jest>jest-util>micromatch>braces"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-gx9m-whjm-85jf",
+      "severity": "high",
+      "moduleName": "dompurify",
+      "title": "DOMpurify has a nesting-based mXSS",
+      "url": "https://github.com/advisories/GHSA-gx9m-whjm-85jf",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-h7mw-gpvr-xq4m",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify: FORBID_TAGS bypassed by function-based ADD_TAGS predicate (asymmetry with FORBID_ATTR fix)",
+      "url": "https://github.com/advisories/GHSA-h7mw-gpvr-xq4m",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-h8r8-wccr-v5f2",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify is vulnerable to mutation-XSS via Re-Contextualization ",
+      "url": "https://github.com/advisories/GHSA-h8r8-wccr-v5f2",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-hqhp-5p83-hx96",
+      "severity": "moderate",
+      "moduleName": "prismjs",
+      "title": "prismjs Regular Expression Denial of Service vulnerability",
+      "url": "https://github.com/advisories/GHSA-hqhp-5p83-hx96",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>prismjs",
+        "docsify-cli>docsify>prismjs"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-hrpp-h998-j3pp",
+      "severity": "high",
+      "moduleName": "qs",
+      "title": "qs vulnerable to Prototype Pollution",
+      "url": "https://github.com/advisories/GHSA-hrpp-h998-j3pp",
+      "paths": [
+        "coveralls>request>qs"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-j8xg-fqg3-53r7",
+      "severity": "moderate",
+      "moduleName": "word-wrap",
+      "title": "word-wrap vulnerable to Regular Expression Denial of Service",
+      "url": "https://github.com/advisories/GHSA-j8xg-fqg3-53r7",
+      "paths": [
+        "eslint>optionator>word-wrap",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>escodegen>optionator>word-wrap",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>escodegen>optionator>word-wrap",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>escodegen>optionator>word-wrap",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>escodegen>optionator>word-wrap"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-jgrx-mgxx-jf9v",
+      "severity": "high",
+      "moduleName": "tmpl",
+      "title": "tmpl vulnerable to Inefficient Regular Expression Complexity which may lead to resource exhaustion",
+      "url": "https://github.com/advisories/GHSA-jgrx-mgxx-jf9v",
+      "paths": [
+        "babel-jest>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "babel-jest>@jest/transform>jest-haste-map>walker>makeerror>tmpl",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>walker>makeerror>tmpl"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-m6fv-jmcg-4jfg",
+      "severity": "low",
+      "moduleName": "send",
+      "title": "send vulnerable to template injection that can lead to XSS",
+      "url": "https://github.com/advisories/GHSA-m6fv-jmcg-4jfg",
+      "paths": [
+        "docsify-cli>serve-static>send",
+        "live-server>send"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-mh29-5h37-fv8m",
+      "severity": "moderate",
+      "moduleName": "js-yaml",
+      "title": "js-yaml has prototype pollution in merge (<<)",
+      "url": "https://github.com/advisories/GHSA-mh29-5h37-fv8m",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "coveralls>js-yaml",
+        "eslint>@eslint/eslintrc>js-yaml",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-mmhx-hmjr-r674",
+      "severity": "high",
+      "moduleName": "dompurify",
+      "title": "DOMPurify allows tampering by prototype pollution",
+      "url": "https://github.com/advisories/GHSA-mmhx-hmjr-r674",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-mw96-cpmx-2vgc",
+      "severity": "high",
+      "moduleName": "rollup",
+      "title": "Rollup 4 has Arbitrary File Write via Path Traversal",
+      "url": "https://github.com/advisories/GHSA-mw96-cpmx-2vgc",
+      "paths": [
+        "rollup"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-p3vf-v8qc-cwcr",
+      "severity": "critical",
+      "moduleName": "dompurify",
+      "title": "DOMPurify vulnerable to tampering by prototype polution",
+      "url": "https://github.com/advisories/GHSA-p3vf-v8qc-cwcr",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-p8p7-x288-28g6",
+      "severity": "moderate",
+      "moduleName": "request",
+      "title": "Server-Side Request Forgery in Request",
+      "url": "https://github.com/advisories/GHSA-p8p7-x288-28g6",
+      "paths": [
+        "coveralls>request"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-pfrx-2q88-qq97",
+      "severity": "moderate",
+      "moduleName": "got",
+      "title": "Got allows a redirect to a UNIX socket",
+      "url": "https://github.com/advisories/GHSA-pfrx-2q88-qq97",
+      "paths": [
+        "docsify-cli>update-notifier>latest-version>package-json>got"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-qj8w-gfj5-8c6v",
+      "severity": "moderate",
+      "moduleName": "serialize-javascript",
+      "title": "Serialize JavaScript has CPU Exhaustion Denial of Service via crafted array-like objects",
+      "url": "https://github.com/advisories/GHSA-qj8w-gfj5-8c6v",
+      "paths": [
+        "rollup-plugin-terser>serialize-javascript"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "severity": "high",
+      "moduleName": "lodash",
+      "title": "lodash vulnerable to Code Injection via `_.template` imports key names",
+      "url": "https://github.com/advisories/GHSA-r5fr-rjxr-66jc",
+      "paths": [
+        "@babel/core>lodash",
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>lodash",
+        "@commitlint/cli>@commitlint/load>@commitlint/resolve-extends>lodash",
+        "@commitlint/cli>@commitlint/load>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-r683-j2x4-v87g",
+      "severity": "high",
+      "moduleName": "node-fetch",
+      "title": "node-fetch forwards secure headers to untrusted sites",
+      "url": "https://github.com/advisories/GHSA-r683-j2x4-v87g",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>node-fetch",
+        "node-fetch"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-rc47-6667-2j5j",
+      "severity": "high",
+      "moduleName": "http-cache-semantics",
+      "title": "http-cache-semantics vulnerable to Regular Expression Denial of Service",
+      "url": "https://github.com/advisories/GHSA-rc47-6667-2j5j",
+      "paths": [
+        "docsify-cli>update-notifier>latest-version>package-json>got>cacheable-request>http-cache-semantics"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-rf6f-7fwh-wjgh",
+      "severity": "high",
+      "moduleName": "flatted",
+      "title": "Prototype Pollution via parse() in NodeJS flatted",
+      "url": "https://github.com/advisories/GHSA-rf6f-7fwh-wjgh",
+      "paths": [
+        "eslint>file-entry-cache>flat-cache>flatted"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-rrrm-qjm4-v8hf",
+      "severity": "high",
+      "moduleName": "marked",
+      "title": "Inefficient Regular Expression Complexity in marked",
+      "url": "https://github.com/advisories/GHSA-rrrm-qjm4-v8hf",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>marked",
+        "docsify-cli>docsify>marked"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-v6h2-p8h4-qcjw",
+      "severity": "low",
+      "moduleName": "brace-expansion",
+      "title": "brace-expansion Regular Expression Denial of Service vulnerability",
+      "url": "https://github.com/advisories/GHSA-v6h2-p8h4-qcjw",
+      "paths": [
+        "babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "babel-jest>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "babel-jest>babel-plugin-istanbul>test-exclude>minimatch>brace-expansion",
+        "dts-bundle>glob>minimatch>brace-expansion",
+        "eslint>minimatch>brace-expansion",
+        "jest>@jest/core>@jest/reporters>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>@jest/core>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>test-exclude>glob>minimatch>brace-expansion"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-vh95-rmgr-6w4m",
+      "severity": "moderate",
+      "moduleName": "minimist",
+      "title": "Prototype Pollution in minimist",
+      "url": "https://github.com/advisories/GHSA-vh95-rmgr-6w4m",
+      "paths": [
+        "dts-bundle>detect-indent>minimist"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-vhxf-7vqr-mrjg",
+      "severity": "moderate",
+      "moduleName": "dompurify",
+      "title": "DOMPurify allows Cross-site Scripting (XSS)",
+      "url": "https://github.com/advisories/GHSA-vhxf-7vqr-mrjg",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>dompurify",
+        "docsify-cli>docsify>dompurify"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-vpq2-c234-7xj6",
+      "severity": "low",
+      "moduleName": "@tootallnate/once",
+      "title": "@tootallnate/once vulnerable to Incorrect Control Flow Scoping",
+      "url": "https://github.com/advisories/GHSA-vpq2-c234-7xj6",
+      "paths": [
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>http-proxy-agent>@tootallnate/once",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>http-proxy-agent>@tootallnate/once",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>http-proxy-agent>@tootallnate/once",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>http-proxy-agent>@tootallnate/once"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-w573-4hg7-7wgq",
+      "severity": "high",
+      "moduleName": "decode-uri-component",
+      "title": "decode-uri-component vulnerable to Denial of Service (DoS)",
+      "url": "https://github.com/advisories/GHSA-w573-4hg7-7wgq",
+      "paths": [
+        "babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "babel-jest>@jest/transform>jest-haste-map>sane>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>@jest/core>@jest/reporters>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>@jest/core>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>jest-haste-map>sane>anymatch>micromatch>extglob>expand-brackets>snapdragon>source-map-resolve>decode-uri-component",
+        "live-server>chokidar>anymatch>micromatch>braces>snapdragon>source-map-resolve>decode-uri-component",
+        "live-server>chokidar>anymatch>micromatch>snapdragon>source-map-resolve>decode-uri-component",
+        "live-server>chokidar>braces>snapdragon>source-map-resolve>decode-uri-component"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "moduleName": "uuid",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "paths": [
+        "coveralls>request>uuid",
+        "jest>@jest/core>@jest/reporters>node-notifier>uuid",
+        "jest>jest-cli>@jest/core>@jest/reporters>node-notifier>uuid"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-x7hr-w5r2-h6wg",
+      "severity": "moderate",
+      "moduleName": "prismjs",
+      "title": "PrismJS DOM Clobbering vulnerability",
+      "url": "https://github.com/advisories/GHSA-x7hr-w5r2-h6wg",
+      "paths": [
+        "docsify-cli>docsify-server-renderer>docsify>prismjs",
+        "docsify-cli>docsify>prismjs"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-xvch-5gv4-984h",
+      "severity": "critical",
+      "moduleName": "minimist",
+      "title": "Prototype Pollution in minimist",
+      "url": "https://github.com/advisories/GHSA-xvch-5gv4-984h",
+      "paths": [
+        "@babel/core>json5>minimist",
+        "babel-jest>@jest/transform>@babel/core>json5>minimist",
+        "coveralls>minimist",
+        "dts-bundle>detect-indent>minimist",
+        "eslint-plugin-import>tsconfig-paths>json5>minimist",
+        "jest>@jest/core>@jest/reporters>@jest/transform>@babel/core>json5>minimist",
+        "jest>@jest/core>@jest/transform>@babel/core>json5>minimist",
+        "jest>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>json5>minimist",
+        "jest>jest-cli>@jest/core>jest-config>babel-jest>@jest/transform>@babel/core>json5>minimist",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>@babel/core>json5>minimist",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>json5>minimist",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>@babel/core>json5>minimist",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>babel-jest>@jest/transform>babel-plugin-istanbul>istanbul-lib-instrument>@babel/core>json5>minimist"
+      ],
+      "isAllowlisted": false
+    },
+    {
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "severity": "moderate",
+      "moduleName": "lodash",
+      "title": "Lodash has Prototype Pollution Vulnerability in `_.unset` and `_.omit` functions",
+      "url": "https://github.com/advisories/GHSA-xxjr-mmjv-4gpg",
+      "paths": [
+        "@babel/core>lodash",
+        "@commitlint/cli>@commitlint/lint>@commitlint/parse>conventional-commits-parser>lodash",
+        "@commitlint/cli>@commitlint/load>@commitlint/resolve-extends>lodash",
+        "@commitlint/cli>@commitlint/load>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>@jest/core>jest-config>jest-environment-jsdom>jsdom>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash",
+        "jest>jest-cli>@jest/core>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jsdom>data-urls>whatwg-url>lodash"
+      ],
+      "isAllowlisted": false
+    }
+  ]
+}
