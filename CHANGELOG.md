@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/BARMPlus/locklens/compare/v1.1.7...v1.1.8) (2026-05-22)
+
+
+### Bug Fixes
+
+* 兜底 audit-ci 会携带私有源检测的问题 ([4efb826](https://github.com/BARMPlus/locklens/commit/4efb82696b93b75298e1d5b009394245a4fdfdf3))
+
+
+### Chores
+
+* 更新SKILL.md ([7152738](https://github.com/BARMPlus/locklens/commit/715273882aacd442ed1e924406e69e15613e9bfe))
+* 更新SKILL.md ([74cca7a](https://github.com/BARMPlus/locklens/commit/74cca7adc94939c18f9265d909d0037388a0d28c))
+* 更新SKILL.md ([c356df8](https://github.com/BARMPlus/locklens/commit/c356df81555337b454a44efe610f19afb2114e99))
+* 添加示例 ([36db291](https://github.com/BARMPlus/locklens/commit/36db291a28f22eb4283cfe911da3646e5c4f804f))
+
 ### [1.1.7](https://github.com/BARMPlus/locklens/compare/v1.1.6...v1.1.7) (2026-04-22)
 
 
