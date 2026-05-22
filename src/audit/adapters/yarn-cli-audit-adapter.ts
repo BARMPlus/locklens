@@ -27,6 +27,12 @@ interface YarnAuditCommandResult {
   payload: YarnAuditPayload
 }
 
+interface YarnAuditCommandSpec {
+  command: string
+  args: string[]
+  label: string
+}
+
 const YARN_AUDIT_TIMEOUT_MS = 60_000
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -437,24 +443,41 @@ function buildAuditCiCommand(input: AuditCiAdapterInput) {
   return {
     command: process.execPath,
     args: [auditCiBinPath, ...args],
+    label: 'audit-ci',
   }
 }
 
-async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<YarnAuditCommandResult> {
+function buildYarnNpmAuditFallbackCommand(input: AuditCiAdapterInput): YarnAuditCommandSpec {
+  return {
+    command: 'yarn',
+    args: [
+      'npm',
+      'audit',
+      '--json',
+      '--all',
+      ...(input.skipDev ? ['--environment', 'production'] : []),
+      ...(input.extraArgs ?? []),
+    ],
+    label: 'yarn npm audit',
+  }
+}
+
+function isYarnRegistryBadRequest(error: AuditExecutionError) {
+  return error.message.includes('Bad Request')
+}
+
+async function runYarnAuditCommand(
+  input: AuditCiAdapterInput,
+  auditCommand: YarnAuditCommandSpec,
+): Promise<YarnAuditCommandResult> {
   const stdoutFilePath = createTempAuditFilePath('stdout.log')
   const stderrMessages: string[] = []
 
-  // Yarn 这条链路优先复用当前项目本地安装的 audit-ci 可执行文件，
-  // 避免引入 npx 的额外解析和版本漂移问题。
-  const auditCiCommand = buildAuditCiCommand(input)
-
-  // 这里不再使用 `script` 去伪造终端环境。
-  // 我们已经确认“直接执行本地 audit-ci + 落盘 stdout”能够拿到完整 JSON，
-  // 而 `script` 反而会让 Yarn 提前结束，只留下 registry 提示。
+  // 这里统一落盘 stdout，避免大体积 JSON 通过内存事件流拼接时被截断。
   const processOutputStream = createWriteStream(stdoutFilePath, {
     encoding: 'utf8',
   })
-  const auditProcess = spawn(auditCiCommand.command, auditCiCommand.args, {
+  const auditProcess = spawn(auditCommand.command, auditCommand.args, {
     cwd: input.detection.directory,
     env: createCleanAuditEnv(),
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -547,8 +570,27 @@ async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<YarnAuditC
   const errorMessage = stderr.length > 0 ? stderr : 'audit-ci returned no parsable Yarn JSON output'
 
   throw new AuditExecutionError(
-    `Yarn audit failed for ${input.detection.lockfileName} (exit code: ${exitCode}): ${errorMessage}`,
+    `Yarn audit failed for ${input.detection.lockfileName} via ${auditCommand.label} (exit code: ${exitCode}): ${errorMessage}`,
   )
+}
+
+async function runAuditCiCommand(input: AuditCiAdapterInput): Promise<YarnAuditCommandResult> {
+  // Yarn 这条链路优先复用当前项目本地安装的 audit-ci 可执行文件，
+  // 避免引入 npx 的额外解析和版本漂移问题。
+  //
+  // 部分 Yarn Berry 项目的私有 registry 不接受 audit-ci 固定追加的
+  // `yarn npm audit --recursive` 请求，会返回 `YN0035: Bad Request`。
+  // 这种情况下直接调用项目自己的 `yarn npm audit --json --all`，仍可拿到
+  // 标准 audit JSON，并继续复用后续归一化逻辑。
+  try {
+    return await runYarnAuditCommand(input, buildAuditCiCommand(input))
+  } catch (error) {
+    if (error instanceof AuditExecutionError && isYarnRegistryBadRequest(error)) {
+      return runYarnAuditCommand(input, buildYarnNpmAuditFallbackCommand(input))
+    }
+
+    throw error
+  }
 }
 
 export async function runYarnCliAuditAdapter(
